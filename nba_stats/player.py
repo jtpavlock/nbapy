@@ -1,4 +1,4 @@
-from nba_stats import _api_scrape, _get_json, HAS_PANDAS
+from nba_stats import _api_scrape, _get_json
 from nba_stats import constants
 
 
@@ -33,11 +33,8 @@ def get_player(first_name,
     else:
         name = '{}, {}'.format(last_name, first_name).lower()
     pl = PlayerList(season=season, only_current=only_current).info()
-    hdr = 'DISPLAY_LAST_COMMA_FIRST'
-    if HAS_PANDAS:
-        item = pl[pl.DISPLAY_LAST_COMMA_FIRST.str.lower() == name]
-    else:
-        item = next(plyr for plyr in pl if str(plyr[hdr]).lower() == name)
+    item = pl[pl.DISPLAY_LAST_COMMA_FIRST.str.lower() == name]
+
     if len(item) == 0:
         raise PlayerNotFoundException
     elif just_id:
