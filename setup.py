@@ -12,7 +12,10 @@ setup(
     packages=[
         'nba_stats',
     ],
-    install_requires=['requests'],
+    install_requires=[
+        'requests',
+        'pandas',
+    ],
     extras_require={
         'dev': [
             'pytest',
