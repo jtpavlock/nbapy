@@ -1,9 +1,9 @@
-.. nba_py documentation master file, created by
+.. nba_stats documentation master file, created by
    sphinx-quickstart on Tue Sep 08 14:33:19 2015.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to nba_py's documentation!
+Welcome to nba_stats's documentation!
 ==================================
 
 Contents:
@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   nba_py
+   nba_stats
    player
    game
    team

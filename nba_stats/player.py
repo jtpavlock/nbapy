@@ -1,5 +1,5 @@
-from nba_py import _api_scrape, _get_json, HAS_PANDAS
-from nba_py import constants
+from nba_stats import _api_scrape, _get_json, HAS_PANDAS
+from nba_stats import constants
 
 
 class PlayerNotFoundException(Exception):

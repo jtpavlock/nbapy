@@ -1,7 +1,7 @@
-nba_py.constants module
+nba_stats.constants module
 -----------------------
 
-.. automodule:: nba_py.constants
+.. automodule:: nba_stats.constants
     :members:
     :undoc-members:
     :show-inheritance:

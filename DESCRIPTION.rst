@@ -1,4 +1,4 @@
-nba_py
+nba_stats
 =======================
 
 A python facing API for stats.nba.com RESTful API, partially based off

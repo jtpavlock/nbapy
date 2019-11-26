@@ -1,5 +1,5 @@
-from nba_py import _api_scrape, _get_json
-from nba_py import constants
+from nba_stats import _api_scrape, _get_json
+from nba_stats import constants
 
 
 class ShotChart:

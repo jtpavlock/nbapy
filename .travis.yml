@@ -5,7 +5,7 @@ python:
 install:
   - pip install .
   - pip install pytest flake8
-before_script: flake8 nba_py
+before_script: flake8 nba_stats
 script: py.test -v tests/
 deploy:
   provider: pypi
@@ -15,4 +15,4 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: seemethere/nba_py
+    repo: seemethere/nba_stats

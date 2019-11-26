@@ -1,7 +1,7 @@
-nba_py.player module
+nba_stats.player module
 --------------------
 
-.. automodule:: nba_py.player
+.. automodule:: nba_stats.player
     :members:
     :undoc-members:
     :show-inheritance:
