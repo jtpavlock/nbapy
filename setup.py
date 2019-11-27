@@ -20,6 +20,7 @@ setup(
         'dev': [
             'pytest',
             'pytest-cov',
+            'requests_cache',  # to speed up testing
             'flake8',
         ]
     },
