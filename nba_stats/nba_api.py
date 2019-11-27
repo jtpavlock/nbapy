@@ -33,25 +33,31 @@ class NbaAPI():
         support it.
 
         Args:
-            result_set_name: The name of the "resultSet" to return.
-            This should be set if the nba.com api uses 'resultSets' even if
-            there is only one set. If the api refers to the set as just
-            'resultSet', then this argument may be omitted.
+            result_set_name: The name of the json 'resultSet' to return.
+                This should be set whenever the nba.com api returns more than
+                one 'resultSet' to specify which you want. If there is only
+                one, it may be left blank.
 
         Returns:
             Result in a panadas dataframe
 
         """
+        # result_set can either be under 'resultSets' or 'resultSet'
         if result_set_name:
-            result_set = next(
-                (res for res in self.json['resultSets']
-                 if res['name'] == result_set_name), None)
+            try:
+                result_set = next(
+                    (res for res in self.json['resultSets']
+                     if res['name'] == result_set_name), None)
+            except KeyError:
+                # maybe it's under 'resultSet'
+                result_set = next(
+                    (res for res in self.json['resultSet']
+                     if res['name'] == result_set_name), None)
         else:
             # there should only be one resultSet to lookup
             try:
                 result_set = self.json['resultSet']
             except KeyError:
-                print('here')
                 # maybe it's under 'resultSets'
                 result_set = self.json['resultSets'][0]
 
