@@ -46,3 +46,6 @@ $ pip install .
 #### 6. Submit a pull request
 
 Other ways to contribute involve submitting any issues or adding some documentation!
+
+## To-Do
+- Jupyter Notebook documentation
