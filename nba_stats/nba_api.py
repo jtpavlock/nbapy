@@ -5,7 +5,7 @@ import pandas as pd
 
 
 class NbaAPI():
-    TODAY = datetime.today()
+    TODAY = datetime.datetime.today()
     BASE_URL = 'http://stats.nba.com/stats/'
     HEADERS = {
         'Host': 'stats.nba.com',
@@ -33,7 +33,10 @@ class NbaAPI():
         support it.
 
         Args:
-            result_set_name: The name of the "resultSet" to return
+            result_set_name: The name of the "resultSet" to return.
+            This should be set if the nba.com api uses 'resultSets' even if
+            there is only one set. If the api refers to the set as just
+            'resultSet', then this argument may be omitted.
 
         Returns:
             Result in a panadas dataframe
@@ -43,9 +46,15 @@ class NbaAPI():
             result_set = next(
                 (res for res in self.json['resultSets']
                  if res['name'] == result_set_name), None)
-
         else:
-            result_set = self.json['resultSet']
+            # there should only be one resultSet to lookup
+            try:
+                result_set = self.json['resultSet']
+            except KeyError:
+                print('here')
+                # maybe it's under 'resultSets'
+                result_set = self.json['resultSets'][0]
+
         headers = result_set['headers']
         values = result_set['rowSet']
 
