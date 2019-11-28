@@ -28,7 +28,7 @@ class NbaAPI():
         self.params = params
         self.json = self._get_json()
 
-    def get_result(self, result_set_name: str=None):
+    def get_result(self, result_set_name: str = None):
         """Return a specific set of results from our request for those that
         support it.
 

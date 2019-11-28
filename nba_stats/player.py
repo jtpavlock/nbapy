@@ -135,7 +135,7 @@ class Splits:
         shot_clock_range: Filter statistics by range in shot clock
         last_n_games: Filter by number of games specified in N
     """
-    _endpoint = 'playerdashboardbygeneralsplits' # this could be any split
+    _endpoint = 'playerdashboardbygeneralsplits'  # this could be any split
 
     def __init__(
             self,
