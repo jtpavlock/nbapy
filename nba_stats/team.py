@@ -1,17 +1,20 @@
-from nba_stats import _api_scrape, _get_json
+from nba_stats.nba_api import NbaAPI
 from nba_stats import constants
 
 
-class TeamList:
+class List:
     _endpoint = 'commonteamyears'
 
     def __init__(self,
                  league_id=constants.League.NBA):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'LeagueID': league_id})
+        self._params = {
+            'LeagueID': league_id
+        }
 
-    def info(self):
-        return _api_scrape(self.json, 0)
+        self.api = NbaAPI(self._endpoint, self._params)
+
+    def results(self):
+        return self.api.get_result()
 
 
 class TeamSummary:
@@ -35,36 +38,48 @@ class TeamSummary:
         return _api_scrape(self.json, 1)
 
 
-class TeamDetails:
+class Details:
+    """Various team details."""
     _endpoint = 'teamdetails'
 
     def __init__(self, team_id):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'TeamID': team_id})
+        self._params = {
+            'TeamID': team_id
+        }
+
+        self.api = NbaAPI(self._endpoint, self._params)
 
     def background(self):
-        return _api_scrape(self.json, 0)
+        """Background info such as coach, city, arena, owner, etc. """
+        return self.api.get_result('TeamBackground')
 
     def history(self):
-        return _api_scrape(self.json, 1)
+        """History info such as nickname, year founded, etc."""
+        return self.api.get_result('TeamHistory')
 
     def social_sites(self):
-        return _api_scrape(self.json, 2)
+        """Team social media sites."""
+        return self.api.get_result('TeamSocialSites')
 
     def awards_championships(self):
-        return _api_scrape(self.json, 3)
+        """Champtionship title victories and opponents"""
+        return self.api.get_result('TeamAwardsChamptionships')
 
     def awards_conf(self):
-        return _api_scrape(self.json, 4)
+        """Conference title victories and opponents"""
+        return self.api.get_result('TeamAwardsConf')
 
     def awards_div(self):
-        return _api_scrape(self.json, 5)
+        """Division title victories and opponents"""
+        return self.api.get_result('TeamAwardsDiv')
 
     def hof(self):
-        return _api_scrape(self.json, 6)
+        """All team hall of fame players."""
+        return self.api.get_result('TeamHof')
 
     def retired(self):
-        return _api_scrape(self.json, 7)
+        """Retired numbers and associated info"""
+        return self.api.get_result('TeamRetired')
 
 
 class TeamCommonRoster:
