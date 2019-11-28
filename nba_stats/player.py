@@ -1,4 +1,6 @@
-from nba_stats import _api_scrape, _get_json
+import pandas as pd
+
+from nba_stats.nba_api import NbaAPI
 from nba_stats import constants
 
 
@@ -6,997 +8,613 @@ class PlayerNotFoundException(Exception):
     pass
 
 
-def get_player(first_name,
-               last_name=None,
-               season=constants.CURRENT_SEASON,
-               only_current=0,
-               just_id=True):
+def get_id(
+        name,
+        season=constants.CURRENT_SEASON,
+        active_only=1,
+):
     """
-    Calls our PlayerList class to get a full list of players and then returns
-    just an id if specified or the full row of player information
+    Get a player_id for any specified player.
+
+    Calls PlayerList, then matches name to return the id. Player id is needed
+    for most of our player functions.
 
     Args:
-        :first_name: First name of the player
-        :last_name: Last name of the player
-        (this is None if the player only has first name [Nene])
-        :only_current: Only wants the current list of players
-        :just_id: Only wants the id of the player
+        name: name of the player to lookup. This must match the name
+            as presented on nba.com (case insensitive)
+        season: season to lookup
+        active_only: only match active players
 
     Returns:
-        Either the ID or full row of information of the player inputted
+        Nba.com player_id
 
     Raises:
-        :PlayerNotFoundException::
+        PlayerNotFoundException
     """
-    if last_name is None:
-        name = first_name.lower()
-    else:
-        name = '{}, {}'.format(last_name, first_name).lower()
-    pl = PlayerList(season=season, only_current=only_current).info()
-    item = pl[pl.DISPLAY_LAST_COMMA_FIRST.str.lower() == name]
+    name = name.lower()
 
-    if len(item) == 0:
-        raise PlayerNotFoundException
-    elif just_id:
-        return item['PERSON_ID']
-    else:
-        return item
+    players = pd.DataFrame(
+        PlayerList(season=season, active_only=active_only).results())
+
+    player = players.loc[players['DISPLAY_FIRST_LAST'].str.lower() == name,
+                         'PERSON_ID']
+    try:
+        player_id = player.iat[0]
+    except IndexError:
+        raise PlayerNotFoundException(
+            f'The player "{name}" could not be found. Please double check the '
+            'name against nba.com')
+
+    return player_id
 
 
 class PlayerList:
     """
-    Contains a list of all players for a season, if specified, and will only
-    contain current players if specified as well
+    Contains a list of players and their teams.
 
     Args:
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :only_current: Restrict lookup to only current players
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        league_id: ID for the league to look in
+        season: Season given to look up. This affects whether or not the player
+            is active and on what team.
+        active_only: (1 or 0 for true or false respectively).
+            Only return active players for the given season.
+            If season is set prior to the current season, and active_only is 1,
+            then only players who's career ended in the specified season will
+            be listed.
     """
     _endpoint = 'commonallplayers'
 
-    def __init__(self,
-                 league_id=constants.League.NBA,
-                 season=constants.CURRENT_SEASON,
-                 only_current=1):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'LeagueID': league_id,
-                                      'Season': season,
-                                      'IsOnlyCurrentSeason': only_current})
+    def __init__(
+            self,
+            league_id=constants.League.NBA,
+            season=constants.CURRENT_SEASON,
+            active_only=1,
+    ):
+        self._params = {
+            'LeagueID': league_id,
+            'Season': season,
+            'IsOnlyCurrentSeason': active_only,
+        }
+        self.api = NbaAPI(self._endpoint, self._params)
 
-    def info(self):
-        return _api_scrape(self.json, 0)
+    def results(self):
+        return self.api.get_result()
 
 
-class PlayerSummary:
+class Summary:
     """
     Contains common player information like headline stats, weight, etc.
 
     Args:
-        :player_id: ID of the player to look up
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        player_id: ID of the player to look up
     """
     _endpoint = 'commonplayerinfo'
 
-    def __init__(self,
-                 player_id):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'PlayerID': player_id})
+    def __init__(self, player_id):
+        self._params = {'PlayerID': player_id}
+
+        self.api = NbaAPI(self._endpoint, self._params)
 
     def info(self):
-        return _api_scrape(self.json, 0)
+        return self.api.get_result('CommonPlayerInfo')
 
     def headline_stats(self):
-        return _api_scrape(self.json, 1)
+        return self.api.get_result('PlayerHeadlineStats')
 
 
-class _PlayerDashboard:
+class Splits:
     """
-    Has all the basic arguments for all of the Player Dashboard type objects
+    Player stats splits.
+
+    Also a base class containing common arguments for different split type
+    child classes.
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        player_id: ID of the player to look up
+        team_id: ID of the team to look up
+        measure_type: Specifies type of measure to use (Base, Advanced, etc.)
+        per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
+        plus_minus: Whether or not to consider plus minus (Y or N)
+        pace_adjust: Whether or not to pace adjust stats (Y or N)
+        rank: Whether or not to consider rank (Y or N)
+        league_id: ID for the league to look in (Default is 00)
+        season: Season given to look up
+        season_type: Season type to consider (Regular / Playoffs)
+        po_round: Playoff round
+        outcome: Filter out by wins or losses
+        location: Filter out by home or away
+        month: Specify month to filter by
+        season_segment: Filter by pre/post all star break
+        date_from: Filter out games before a specific date
+        date_to: Filter out games after a specific date
+        opponent_team_id: Opponent team ID to look up
+        vs_conference: Filter by conference
+        vs_division: Filter by division
+        game_segment: Filter by half / overtime
+        period: Filter by quarter / specific overtime
+        shot_clock_range: Filter statistics by range in shot clock
+        last_n_games: Filter by number of games specified in N
     """
-    _endpoint = 'playerdashboardbyyearoveryear'
+    _endpoint = 'playerdashboardbygeneralsplits' # this could be any split
 
-    def __init__(self,
-                 player_id,
-                 team_id=0,
-                 measure_type=constants.MeasureType.Default,
-                 per_mode=constants.PerMode.Default,
-                 plus_minus=constants.PlusMinus.Default,
-                 pace_adjust=constants.PaceAdjust.Default,
-                 rank=constants.PaceAdjust.Default,
-                 league_id=constants.League.Default,
-                 season=constants.CURRENT_SEASON,
-                 season_type=constants.SeasonType.Default,
-                 po_round=constants.PlayoffRound.Default,
-                 outcome=constants.Outcome.Default,
-                 location=constants.Location.Default,
-                 month=constants.Month.Default,
-                 season_segment=constants.SeasonSegment.Default,
-                 date_from=constants.DateFrom.Default,
-                 date_to=constants.DateTo.Default,
-                 opponent_team_id=constants.OpponentTeamID.Default,
-                 vs_conference=constants.VsConference.Default,
-                 vs_division=constants.VsDivision.Default,
-                 game_segment=constants.GameSegment.Default,
-                 period=constants.Period.Default,
-                 shot_clock_range=constants.ShotClockRange.Default,
-                 last_n_games=constants.LastNGames.Default):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'PlayerID': player_id,
-                                      'TeamID': team_id,
-                                      'MeasureType': measure_type,
-                                      'PerMode': per_mode,
-                                      'PlusMinus': plus_minus,
-                                      'PaceAdjust': pace_adjust,
-                                      'Rank': rank,
-                                      'LeagueID': league_id,
-                                      'Season': season,
-                                      'SeasonType': season_type,
-                                      'PORound': po_round,
-                                      'Outcome': outcome,
-                                      'Location': location,
-                                      'Month': month,
-                                      'SeasonSegment': season_segment,
-                                      'DateFrom': date_from,
-                                      'DateTo': date_to,
-                                      'OpponentTeamID': opponent_team_id,
-                                      'VsConference': vs_conference,
-                                      'VsDivision': vs_division,
-                                      'GameSegment': game_segment,
-                                      'Period': period,
-                                      'ShotClockRange': shot_clock_range,
-                                      'LastNGames': last_n_games},
-                              referer='player')
+    def __init__(
+            self,
+            player_id,
+            team_id=0,
+            measure_type=constants.MeasureType.Default,
+            per_mode=constants.PerMode.Default,
+            plus_minus=constants.PlusMinus.Default,
+            pace_adjust=constants.PaceAdjust.Default,
+            rank=constants.PaceAdjust.Default,
+            league_id=constants.League.Default,
+            season=constants.CURRENT_SEASON,
+            season_type=constants.SeasonType.Default,
+            po_round=constants.PlayoffRound.Default,
+            outcome=constants.Outcome.Default,
+            location=constants.Location.Default,
+            month=constants.Month.Default,
+            season_segment=constants.SeasonSegment.Default,
+            date_from=constants.DateFrom.Default,
+            date_to=constants.DateTo.Default,
+            opponent_team_id=constants.OpponentTeamID.Default,
+            vs_conference=constants.VsConference.Default,
+            vs_division=constants.VsDivision.Default,
+            game_segment=constants.GameSegment.Default,
+            period=constants.Period.Default,
+            shot_clock_range=constants.ShotClockRange.Default,
+            last_n_games=constants.LastNGames.Default,
+    ):
+        self._params = {
+            'PlayerID': player_id,
+            'TeamID': team_id,
+            'MeasureType': measure_type,
+            'PerMode': per_mode,
+            'PlusMinus': plus_minus,
+            'PaceAdjust': pace_adjust,
+            'Rank': rank,
+            'LeagueID': league_id,
+            'Season': season,
+            'SeasonType': season_type,
+            'PORound': po_round,
+            'Outcome': outcome,
+            'Location': location,
+            'Month': month,
+            'SeasonSegment': season_segment,
+            'DateFrom': date_from,
+            'DateTo': date_to,
+            'OpponentTeamID': opponent_team_id,
+            'VsConference': vs_conference,
+            'VsDivision': vs_division,
+            'GameSegment': game_segment,
+            'Period': period,
+            'ShotClockRange': shot_clock_range,
+            'LastNGames': last_n_games,
+        }
+        self.api = NbaAPI(self._endpoint, self._params)
 
     def overall(self):
-        return _api_scrape(self.json, 0)
+        return self.api.get_result('OverallPlayerDashboard')
 
 
-class PlayerGeneralSplits(_PlayerDashboard):
+class GeneralSplits(Splits):
     """
-
     Contains stats pertaining to location, wins and losses, pre/post all star
     break, starting position, and numbers of days rest
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashboardbygeneralsplits'
 
     def location(self):
-        return _api_scrape(self.json, 1)
+        return self.api.get_result('LocationPlayerDashboard')
 
-    def win_losses(self):
-        return _api_scrape(self.json, 2)
+    def wins_losses(self):
+        return self.api.get_result('WinsLossesPlayerDashboard')
 
     def month(self):
-        return _api_scrape(self.json, 3)
+        return self.api.get_result('MonthPlayerDashboard')
 
     def pre_post_all_star(self):
-        return _api_scrape(self.json, 4)
+        return self.api.get_result('PrePostAllStarPlayerDashboard')
 
     def starting_position(self):
-        return _api_scrape(self.json, 5)
+        return self.api.get_result('StartingPosition')
 
     def days_rest(self):
-        return _api_scrape(self.json, 6)
+        return self.api.get_result('DaysRestPlayerDashboard')
 
 
-class PlayerOpponentSplits(_PlayerDashboard):
+class OpponentSplits(Splits):
     """
-
     Contains stats pertaining to player stats vs certain opponents by division,
     conference, and by specific team opponent
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashboardbyopponent'
 
     def by_conference(self):
-        return _api_scrape(self.json, 1)
+        return self.api.get_result('ConferencePlayerDashboard')
 
     def by_division(self):
-        return _api_scrape(self.json, 2)
+        return self.api.get_result('DivisionPlayerDashboard')
 
-    def by_opponent(self):
-        return _api_scrape(self.json, 3)
+    def by_team(self):
+        return self.api.get_result('OpponentPlayerDashboard')
 
 
-class PlayerLastNGamesSplits(_PlayerDashboard):
+class LastNGamesSplits(Splits):
     """
     Contains players stats per last 5, 10, 15, and 20 games, or specified
     number of games.
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashboardbylastngames'
 
-    def last5(self):
-        return _api_scrape(self.json, 1)
+    def last_5(self):
+        return self.api.get_result('Last5PlayerDashboard')
 
-    def last10(self):
-        return _api_scrape(self.json, 2)
+    def last_10(self):
+        return self.api.get_result('Last10PlayerDashboard')
 
-    def last15(self):
-        return _api_scrape(self.json, 3)
+    def last_15(self):
+        return self.api.get_result('Last15PlayerDashboard')
 
-    def last20(self):
-        return _api_scrape(self.json, 4)
+    def last_20(self):
+        return self.api.get_result('Last20PlayerDashboard')
 
     def gamenumber(self):
-        return _api_scrape(self.json, 5)
+        """Stats for sets of 10 games"""
+        return self.api.get_result('GameNumberPlayerDashboard')
 
 
-class PlayerInGameSplits(_PlayerDashboard):
+class InGameSplits(Splits):
     """
     Contains player stats by half, by quarter, by score margin, and by actual
     margins.
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashboardbygamesplits'
 
     def by_half(self):
-        return _api_scrape(self.json, 1)
+        return self.api.get_result('ByHalfPlayerDashboard')
 
     def by_period(self):
-        return _api_scrape(self.json, 2)
+        return self.api.get_result('ByPeriodPlayerDashboard')
 
     def by_score_margin(self):
-        return _api_scrape(self.json, 3)
+        return self.api.get_result('ByScoreMarginPlayerDashboard')
 
     def by_actual_margin(self):
-        return _api_scrape(self.json, 4)
+        return self.api.get_result('ByActualMarginPlayerDashboard')
 
 
-class PlayerClutchSplits(_PlayerDashboard):
+class ClutchSplits(Splits):
     """
     Contains a lot of methods for last n minutes with a deficit of x points
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashboardbyclutch'
 
-    def last5min_deficit_5point(self):
-        """
-        Results in last 5 minutes <= 5 points
-        """
-        return _api_scrape(self.json, 1)
+    def last_5m_lte_5pts(self):
+        """Splits in last 5 minutes <= 5 points"""
+        return self.api.get_result('Last5Min5PointPlayerDashboard')
 
-    def last3min_deficit_5point(self):
-        """
-        Results in last 5 minutes <= 5 points
-        """
-        return _api_scrape(self.json, 2)
+    def last_3m_lte_5pts(self):
+        """Splits in last 3 minutes <= 5 points"""
+        return self.api.get_result('Last3Min5PointPlayerDashboard')
 
-    def last1min_deficit_5point(self):
-        """
-        Results in last 5 minutes <= 5 points
-        """
-        return _api_scrape(self.json, 3)
+    def last_1m_lte_5pts(self):
+        """Splits in last minute <= 5 points"""
+        return self.api.get_result('Last1Min5PointPlayerDashboard')
 
-    def last30sec_deficit_3point(self):
-        """
-        Results in last 5 minutes <= 5 points
-        """
-        return _api_scrape(self.json, 4)
+    def last_30s_lte_3pts(self):
+        """Splits in last 30 seconds <= 3 points"""
+        return self.api.get_result('Last30Sec3PointPlayerDashboard')
 
-    def last10sec_deficit_3point(self):
-        """
-        Results in last 5 minutes <= 5 points
-        """
-        return _api_scrape(self.json, 5)
+    def last_10s_lte_3pts(self):
+        """Splits in last 10 seconds <= 3 points"""
+        return self.api.get_result('Last10Sec3PointPlayerDashboard')
 
-    def last5min_plusminus_5point(self):
-        """
-        Last 5 minutes +/= 5 points
-        """
-        return _api_scrape(self.json, 6)
+    def last_5m_pm_5pts(self):
+        """Splits in last 5 minutes +/- 5 points"""
+        return self.api.get_result('Last5MinPlusMinus5PointPlayerDashboard')
 
-    def last3min_plusminus_5point(self):
-        """
-        Last 3 minutes +/= 5 points
-        """
-        return _api_scrape(self.json, 7)
+    def last_3m_pm_5pts(self):
+        """Splits in last 3 minutes +/- 5 points"""
+        return self.api.get_result('Last3MinPlusMinus5PointPlayerDashboard')
 
-    def last1min_plusminus_5point(self):
-        """
-        Last 1 minutes +/= 5 points
-        """
-        return _api_scrape(self.json, 8)
-
-    def last30sec_plusminus_5point(self):
-        """
-        Last 30 seconds +/= 3 points
-        """
-        return _api_scrape(self.json, 9)
+    def last_1m_pm_5pts(self):
+        """Splits in last minute +/- 5 points"""
+        return self.api.get_result('Last1MinPlusMinus5PointPlayerDashboard')
 
 
-class PlayerShootingSplits(_PlayerDashboard):
+class TeamPerformanceSplits(Splits):
     """
-
-    Shooting stats based on distance, area, assisted to, shot types, and
-    assisted by.
+    Player stats by different team performance metrics such as score
+    differential, points scored, and points scored against.
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
-    """
-    _endpoint = 'playerdashboardbyshootingsplits'
-
-    def shot_5ft(self):
-        return _api_scrape(self.json, 1)
-
-    def shot_8ft(self):
-        return _api_scrape(self.json, 2)
-
-    def shot_areas(self):
-        return _api_scrape(self.json, 3)
-
-    def assisted_shots(self):
-        return _api_scrape(self.json, 4)
-
-    def shot_types_summary(self):
-        return _api_scrape(self.json, 5)
-
-    def shot_types_detail(self):
-        return _api_scrape(self.json, 6)
-
-    def assisted_by(self):
-        return _api_scrape(self.json, 7)
-
-
-class PlayerPerformanceSplits(_PlayerDashboard):
-    """
-    Player stats by different performance metrics such as score differntial,
-    points scored, and points scored against
-
-    Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashboardbyteamperformance'
 
     def score_differential(self):
-        return _api_scrape(self.json, 1)
+        return self.api.get_result('ScoreDifferentialPlayerDashboard')
 
     def points_scored(self):
-        return _api_scrape(self.json, 2)
+        return self.api.get_result('PointsScoredPlayerDashboard')
 
     def points_against(self):
-        return _api_scrape(self.json, 3)
+        return self.api.get_result('PontsAgainstPlayerDashboard')
 
 
-class PlayerYearOverYearSplits(_PlayerDashboard):
+class YearOverYearSplits(Splits):
     """
     Displays player stats over the given season and over all seasons in the
     given league
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashboardbyyearoveryear'
 
     def by_year(self):
-        return _api_scrape(self.json, 1)
+        return self.api.get_result('ByYearPlayerDashboard')
 
 
-class PlayerCareer:
+class ShootingSplits(Splits):
+    """
+    Shooting stats based on distance, area, assisted to, shot types, and
+    assisted by.
+
+    Args:
+        see Splits
+    """
+    _endpoint = 'playerdashboardbyshootingsplits'
+
+    def shot_5ft(self):
+        return self.api.get_result('Shot5FTPlayerDashboard')
+
+    def shot_8ft(self):
+        return self.api.get_result('Shot8FTPlayerDashboard')
+
+    def shot_areas(self):
+        return self.api.get_result('ShotAreaPlayerDashboard')
+
+    def assisted_shots(self):
+        return self.api.get_result('AssitedShotPlayerDashboard')
+
+    def shot_types_summary(self):
+        return self.api.get_result('ShotTypeSummaryPlayerDashboard')
+
+    def shot_types_detail(self):
+        return self.api.get_result('ShotTypePlayerDashboard')
+
+    def assisted_by(self):
+        return self.api.get_result('AssistedBy')
+
+
+class Career:
     """
     Contains stats based on several parameters such as career regular season
     totals, post season career totals, all star season careers totals, college
-    season career totals, etc.
+    season career totals, season/career highs and next game info.
 
     Args:
-        :player_id: Player ID to look up
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :league_id: ID for the league to look in (Default is 00)
-
-    Attributes:
-        :json: Contains the full json dump to play around with
-    """
-    _endpoint = 'playercareerstats'
-
-    def __init__(self,
-                 player_id,
-                 per_mode=constants.PerMode.PerGame,
-                 league_id=constants.League.NBA):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'PlayerID': player_id,
-                                      'LeagueID': league_id,
-                                      'PerMode': per_mode})
-
-    def regular_season_totals(self):
-        return _api_scrape(self.json, 0)
-
-    def regular_season_career_totals(self):
-        return _api_scrape(self.json, 1)
-
-    def post_season_totals(self):
-        return _api_scrape(self.json, 2)
-
-    def post_season_career_totals(self):
-        return _api_scrape(self.json, 3)
-
-    def all_star_season_totals(self):
-        return _api_scrape(self.json, 4)
-
-    def career_all_star_season_totals(self):
-        return _api_scrape(self.json, 5)
-
-    def college_season_totals(self):
-        return _api_scrape(self.json, 6)
-
-    def college_season_career_totals(self):
-        return _api_scrape(self.json, 7)
-
-    def preseason_season_totals(self):
-        return _api_scrape(self.json, 8)
-
-    def preseason_career_totals(self):
-        return _api_scrape(self.json, 9)
-
-    def regular_season_rankings(self):
-        return _api_scrape(self.json, 10)
-
-    def post_season_rankings(self):
-        return _api_scrape(self.json, 11)
-
-
-class PlayerProfile(PlayerCareer):
-    """
-    Contains a more in depth version of player career stats with season highs,
-    career highs, and when the player's next game is
-
-    Args:
-        :player_id: Player ID to look up
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :league_id: ID for the league to look in (Default is 00)
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        player_id: Player ID to look up
+        per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
+        league_id: ID for the league to look in (Default is 00)
     """
     _endpoint = 'playerprofilev2'
 
+    def __init__(
+            self,
+            player_id,
+            per_mode=constants.PerMode.PerGame,
+            league_id=constants.League.NBA,
+    ):
+        self._params = {
+            'PlayerID': player_id,
+            'LeagueID': league_id,
+            'PerMode': per_mode,
+        }
+        self.api = NbaAPI(self._endpoint, self._params)
+
+    def reg_season_splits(self, career=False):
+        """Regular-season splits
+
+        Args:
+            career:
+                True: Career totals
+                False: Per-season (per_mode) stats
+        """
+        if career:
+            return self.api.get_result('CareerTotalsRegularSeason')
+        return self.api.get_result('SeasonTotalsRegularSeason')
+
+    def post_season_splits(self, career=False):
+        """Post-season splits
+
+        Args:
+            career:
+                True: Career totals
+                False: Per-season (per_mode) stats
+        """
+        if career:
+            return self.api.get_result('CareerTotalsPostSeason')
+        return self.api.get_result('SeasonTotalsPostSeason')
+
+    def all_star_season_splits(self, career=False):
+        """Splits for all seasons the player was an all-star
+
+        Args:
+            career:
+                True: Career totals
+                False: Per-season (per_mode) stats
+        """
+        if career:
+            return self.api.get_result('CareerTotalsAllStarSeason')
+        return self.api.get_result('SeasonTotalsAllStarSeason')
+
+    def college_season_splits(self, career=False):
+        """College splits
+
+        Args:
+            career:
+                True: Career totals
+                False: Per-season (per_mode) stats
+        """
+        if career:
+            return self.api.get_result('CareerTotalsCollegeSeason')
+        return self.api.get_result('SeasonTotalsCollegeSeason')
+
+    def reg_season_rankings(self):
+        """Regular season split rankings"""
+        return self.api.get_result('SeasonRankingsRegularSeason')
+
+    def post_season_rankings(self):
+        """Post season split rankings"""
+        return self.api.get_result('SeasonRankingsPostSeason')
+
     def season_highs(self):
-        return _api_scrape(self.json, 12)
+        """Season highs in basic stats"""
+        return self.api.get_result('SeasonHighs')
 
     def career_highs(self):
-        return _api_scrape(self.json, 13)
+        """Career highs in basic stats"""
+        return self.api.get_result('CareerHighs')
 
     def next_game(self):
-        return _api_scrape(self.json, 14)
+        """Info on the player's next game"""
+        return self.api.get_result('NextGame')
 
 
-class PlayerGameLogs:
+class GameLogs:
     """
     Contains a full log of all the games for a player for a given season
 
     Args:
-        :player_id: ID of the player to look up
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        player_id: ID of the player to look up
+        league_id: ID for the league to look in
+        season: Season given to look up
+        season_type: Season type to consider (Regular / Playoffs)
     """
     _endpoint = 'playergamelog'
 
-    def __init__(self,
-                 player_id,
-                 league_id=constants.League.NBA,
-                 season=constants.CURRENT_SEASON,
-                 season_type=constants.SeasonType.Regular):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'PlayerID': player_id,
-                                      'LeagueID': league_id,
-                                      'Season': season,
-                                      'SeasonType': season_type})
+    def __init__(
+            self,
+            player_id,
+            league_id=constants.League.NBA,
+            season=constants.CURRENT_SEASON,
+            season_type=constants.SeasonType.Regular,
+    ):
+        self._params = {
+            'PlayerID': player_id,
+            'LeagueID': league_id,
+            'Season': season,
+            'SeasonType': season_type,
+        }
+        self.api = NbaAPI(self._endpoint, self._params)
 
-    def info(self):
-        return _api_scrape(self.json, 0)
+    def results(self):
+        return self.api.get_result('PlayerGameLog')
 
 
-class PlayerShotTracking(_PlayerDashboard):
+class ShotTracking(Splits):
     """
-
     Tracking data for shooting for a given player
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashptshots'
 
-    def general_shooting(self):
-        return _api_scrape(self.json, 1)
+    def overall(self):
+        return self.api.get_result('Overall')
 
-    def shot_clock_shooting(self):
-        return _api_scrape(self.json, 2)
+    def general(self):
+        return self.api.get_result('GeneralShooting')
 
-    def dribble_shooting(self):
-        return _api_scrape(self.json, 3)
+    def shot_clock(self):
+        return self.api.get_result('ShotClockShooting')
 
-    def closest_defender_shooting(self):
-        return _api_scrape(self.json, 4)
+    def dribbles(self):
+        return self.api.get_result('DribbleShooting')
 
-    def closest_defender_shooting_long(self):
-        return _api_scrape(self.json, 5)
+    def closest_defender(self):
+        return self.api.get_result('ClosestDefenderShooting')
 
-    def touch_time_shooting(self):
-        return _api_scrape(self.json, 6)
+    def closest_defender_long(self):
+        return self.api.get_result('ClosestDefender10ftPlusShooting')
+
+    def touch_time(self):
+        return self.api.get_result('TouchTimeShooting')
 
 
-class PlayerReboundTracking(_PlayerDashboard):
+class ReboundTracking(Splits):
     """
-
     Tracking data for rebounding for a given player
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashptreb'
 
-    def shot_type_rebounding(self):
-        return _api_scrape(self.json, 1)
+    def overall(self):
+        return self.api.get_result('OverallRebounding')
 
-    def num_contested_rebounding(self):
-        return _api_scrape(self.json, 2)
+    def shot_type(self):
+        return self.api.get_result('ShotTypeRebounding')
 
-    def shot_distance_rebounding(self):
-        return _api_scrape(self.json, 3)
+    def num_contested(self):
+        return self.api.get_result('NumContestedRebounding')
 
-    def rebound_distance_rebounding(self):
-        return _api_scrape(self.json, 4)
+    def shot_distance(self):
+        return self.api.get_result('ShotDistanceRebounding')
+
+    def rebound_distance(self):
+        return self.api.get_result('RebDistanceRebounding')
 
 
-class PlayerPassTracking(_PlayerDashboard):
+class PassTracking(Splits):
     """
     Tracking data for passing for a given player
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashptpass'
 
-    def passes_made(self):
-        return _api_scrape(self.json, 0)
+    def made(self):
+        return self.api.get_result('PassesMade')
 
-    def passes_received(self):
-        return _api_scrape(self.json, 1)
+    def received(self):
+        return self.api.get_result('PassesReceived')
 
 
-class PlayerDefenseTracking(_PlayerDashboard):
+class DefenseTracking(Splits):
     """
     Tracking data for defense for a given player
 
     Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
+        see Splits
     """
     _endpoint = 'playerdashptshotdefend'
 
-
-class PlayerShotLogTracking(_PlayerDashboard):
-    """
-    Contains a log for every shot for a given season for a given player
-
-    Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
-    """
-    _endpoint = 'playerdashptshotlog'
+    def shot_types(self):
+        return self.api.get_result('DefendingShots')
 
 
-class PlayerReboundLogTracking(_PlayerDashboard):
-    """
-    Contains a log for every rebound for a given season for a given player
-
-    Args:
-        :player_id: ID of the player to look up
-        :team_id: ID of the team to look up
-        :measure_type: Specifies type of measure to use (Base, Advanced, etc.)
-        :per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
-        :plus_minus: Whether or not to consider plus minus (Y or N)
-        :pace_adjust: Whether or not to pace adjust stats (Y or N)
-        :rank: Whether or not to consider rank (Y or N)
-        :league_id: ID for the league to look in (Default is 00)
-        :season: Season given to look up
-        :season_type: Season type to consider (Regular / Playoffs)
-        :po_round: Playoff round
-        :outcome: Filter out by wins or losses
-        :location: Filter out by home or away
-        :month: Specify month to filter by
-        :season_segment: Filter by pre/post all star break
-        :date_from: Filter out games before a specific date
-        :date_to: Filter out games after a specific date
-        :opponent_team_id: Opponent team ID to look up
-        :vs_conference: Filter by conference
-        :vs_division: Filter by division
-        :game_segment: Filter by half / overtime
-        :period: Filter by quarter / specific overtime
-        :shot_clock_range: Filter statistics by range in shot clock
-        :last_n_games: Filter by number of games specified in N
-
-    Attributes:
-        :json: Contains the full json dump to play around with
-    """
-    _endpoint = 'playerdashptreboundlogs'
-
-
-class PlayerVsPlayer:
+class VsPlayer:
     """
     Contains general stats that pertain to players going against other players
 
@@ -1032,85 +650,97 @@ class PlayerVsPlayer:
     """
     _endpoint = 'playervsplayer'
 
-    def __init__(self,
-                 player_id,
-                 vs_player_id,
-                 team_id=0,
-                 measure_type=constants.MeasureType.Default,
-                 per_mode=constants.PerMode.Default,
-                 plus_minus=constants.PlusMinus.Default,
-                 pace_adjust=constants.PaceAdjust.Default,
-                 rank=constants.PaceAdjust.Default,
-                 league_id=constants.League.Default,
-                 season=constants.CURRENT_SEASON,
-                 season_type=constants.SeasonType.Default,
-                 po_round=constants.PlayoffRound.Default,
-                 outcome=constants.Outcome.Default,
-                 location=constants.Location.Default,
-                 month=constants.Month.Default,
-                 season_segment=constants.SeasonSegment.Default,
-                 date_from=constants.DateFrom.Default,
-                 date_to=constants.DateTo.Default,
-                 opponent_team_id=constants.OpponentTeamID.Default,
-                 vs_conference=constants.VsConference.Default,
-                 vs_division=constants.VsDivision.Default,
-                 game_segment=constants.GameSegment.Default,
-                 period=constants.Period.Default,
-                 shot_clock_range=constants.ShotClockRange.Default,
-                 last_n_games=constants.LastNGames.Default):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'PlayerID': player_id,
-                                      'VsPlayerID': vs_player_id,
-                                      'TeamID': team_id,
-                                      'MeasureType': measure_type,
-                                      'PerMode': per_mode,
-                                      'PlusMinus': plus_minus,
-                                      'PaceAdjust': pace_adjust,
-                                      'Rank': rank,
-                                      'LeagueID': league_id,
-                                      'Season': season,
-                                      'SeasonType': season_type,
-                                      'PORound': po_round,
-                                      'Outcome': outcome,
-                                      'Location': location,
-                                      'Month': month,
-                                      'SeasonSegment': season_segment,
-                                      'DateFrom': date_from,
-                                      'DateTo': date_to,
-                                      'OpponentTeamID': opponent_team_id,
-                                      'VsConference': vs_conference,
-                                      'VsDivision': vs_division,
-                                      'GameSegment': game_segment,
-                                      'Period': period,
-                                      'ShotClockRange': shot_clock_range,
-                                      'LastNGames': last_n_games})
+    def __init__(
+            self,
+            player_id,
+            vs_player_id,
+            team_id=0,
+            measure_type=constants.MeasureType.Default,
+            per_mode=constants.PerMode.Default,
+            plus_minus=constants.PlusMinus.Default,
+            pace_adjust=constants.PaceAdjust.Default,
+            rank=constants.PaceAdjust.Default,
+            league_id=constants.League.Default,
+            season=constants.CURRENT_SEASON,
+            season_type=constants.SeasonType.Default,
+            po_round=constants.PlayoffRound.Default,
+            outcome=constants.Outcome.Default,
+            location=constants.Location.Default,
+            month=constants.Month.Default,
+            season_segment=constants.SeasonSegment.Default,
+            date_from=constants.DateFrom.Default,
+            date_to=constants.DateTo.Default,
+            opponent_team_id=constants.OpponentTeamID.Default,
+            vs_conference=constants.VsConference.Default,
+            vs_division=constants.VsDivision.Default,
+            game_segment=constants.GameSegment.Default,
+            period=constants.Period.Default,
+            shot_clock_range=constants.ShotClockRange.Default,
+            last_n_games=constants.LastNGames.Default,
+    ):
+        self._params = {
+            'PlayerID': player_id,
+            'VsPlayerID': vs_player_id,
+            'TeamID': team_id,
+            'MeasureType': measure_type,
+            'PerMode': per_mode,
+            'PlusMinus': plus_minus,
+            'PaceAdjust': pace_adjust,
+            'Rank': rank,
+            'LeagueID': league_id,
+            'Season': season,
+            'SeasonType': season_type,
+            'PORound': po_round,
+            'Outcome': outcome,
+            'Location': location,
+            'Month': month,
+            'SeasonSegment': season_segment,
+            'DateFrom': date_from,
+            'DateTo': date_to,
+            'OpponentTeamID': opponent_team_id,
+            'VsConference': vs_conference,
+            'VsDivision': vs_division,
+            'GameSegment': game_segment,
+            'Period': period,
+            'ShotClockRange': shot_clock_range,
+            'LastNGames': last_n_games,
+        }
+        self.api = NbaAPI(self._endpoint, self._params)
 
     def overall(self):
-        return _api_scrape(self.json, 0)
+        """Splits comparison"""
+        return self.api.get_result('Overall')
 
     def on_off_court(self):
-        return _api_scrape(self.json, 1)
+        """Player1's splits with Player2 on and off the court"""
+        return self.api.get_result('OnOffCourt')
 
-    def shot_distance_overall(self):
-        return _api_scrape(self.json, 2)
+    def shot_dist_overall(self):
+        """Player1's shooting distance splits regardless of Player2"""
+        return self.api.get_result('ShotDistanceOverall')
 
-    def shot_distance_on_court(self):
-        return _api_scrape(self.json, 3)
+    def shot_dist_on_court(self):
+        """Player1's shooting distance splits with Player2 on the court"""
+        return self.api.get_result('ShotDistanceOnCourt')
 
-    def shot_distance_off_court(self):
-        return _api_scrape(self.json, 4)
+    def shot_dist_off_court(self):
+        """Player1's shooting distance splits with Player2 off the court"""
+        return self.api.get_result('ShotDistanceOffCourt')
 
     def shot_area_overall(self):
-        return _api_scrape(self.json, 5)
+        """Player1's shooting by area splits regardless of Player2"""
+        return self.api.get_result('ShotAreaOverall')
 
     def shot_area_on_court(self):
-        return _api_scrape(self.json, 6)
+        """Player1's shooting by area splits with Player2 on the court"""
+        return self.api.get_result('ShotAreaOnCourt')
 
     def shot_area_off_court(self):
-        return _api_scrape(self.json, 7)
+        """Player1's shooting by area splits with Player2 off the court"""
+        return self.api.get_result('ShotAreaOffCourt')
 
     def player_info(self):
-        return _api_scrape(self.json, 8)
+        return self.api.get_result('PlayerInfo')
 
     def vs_player_info(self):
-        return _api_scrape(self.json, 9)
+        return self.api.get_result('VsPlayerInfo')
