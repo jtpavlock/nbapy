@@ -293,7 +293,7 @@ class PlayerTrackingStats:
         return self.api.get_result()
 
 
-class PlayerLeaders:
+class LeagueLeaders:
     """Season league leaders in various stats"""
     _endpoint = 'leagueleaders'
 
