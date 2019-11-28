@@ -385,6 +385,7 @@ class _DefaultZero:
 
 class League:
     NBA = '00'
+    GLeague = '20'
     Default = NBA
 
 
