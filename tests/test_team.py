@@ -106,8 +106,8 @@ class TestGeneralSplits():
 
     @staticmethod
     def test_pre_post_all_star():
-        team_pre_post_all_star = team.GeneralSplits(team_id).pre_post_all_star()
-        assert team_pre_post_all_star is not None
+        team_all_star = team.GeneralSplits(team_id).pre_post_all_star()
+        assert team_all_star is not None
 
     @staticmethod
     def test_days_rest():
@@ -265,8 +265,8 @@ class TestShootingSplits():
 class TestPerformanceSplits():
     @staticmethod
     def test_score_differential():
-        team_score_differential = team.PerformanceSplits(team_id).score_differential()
-        assert team_score_differential is not None
+        team_score_diff = team.PerformanceSplits(team_id).score_differential()
+        assert team_score_diff is not None
 
     @staticmethod
     def test_points_scored():
@@ -340,8 +340,8 @@ class TestShotTracking():
 
     @staticmethod
     def test_closest_defender_long():
-        team_closest_defender_long = team.ShotTracking(team_id).closest_defender_long()
-        assert team_closest_defender_long is not None
+        stats = team.ShotTracking(team_id).closest_defender_long()
+        assert stats is not None
 
     @staticmethod
     def test_touch_time():
@@ -372,8 +372,8 @@ class TestReboundTracking():
 
     @staticmethod
     def test_rebound_distance():
-        team_rebound_distance = team.ReboundTracking(team_id).rebound_distance()
-        assert team_rebound_distance is not None
+        stats = team.ReboundTracking(team_id).rebound_distance()
+        assert stats is not None
 
 
 class TestPassTracking():
