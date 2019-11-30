@@ -88,7 +88,7 @@ class Summary:
     """
     _endpoint = 'commonplayerinfo'
 
-    def __init__(self, player_id):
+    def __init__(self, player_id: str):
         self._params = {'PlayerID': player_id}
 
         self.api = NbaAPI(self._endpoint, self._params)
@@ -137,8 +137,8 @@ class Splits:
 
     def __init__(
             self,
-            player_id,
-            team_id=0,
+            player_id: str,
+            team_id: str = 0,
             measure_type=constants.MeasureType.Default,
             per_mode=constants.PerMode.Default,
             plus_minus=constants.PlusMinus.Default,
@@ -409,7 +409,7 @@ class Career:
 
     def __init__(
             self,
-            player_id,
+            player_id: str,
             per_mode=constants.PerMode.PerGame,
             league_id=constants.League.NBA,
     ):
@@ -502,7 +502,7 @@ class GameLogs:
 
     def __init__(
             self,
-            player_id,
+            player_id: str,
             league_id=constants.League.NBA,
             season=constants.CURRENT_SEASON,
             season_type=constants.SeasonType.Regular,
@@ -638,9 +638,9 @@ class VsPlayer:
 
     def __init__(
             self,
-            player_id,
-            vs_player_id,
-            team_id=0,
+            player_id: str,
+            vs_player_id: str,
+            team_id: str = 0,
             measure_type=constants.MeasureType.Default,
             per_mode=constants.PerMode.Default,
             plus_minus=constants.PlusMinus.Default,

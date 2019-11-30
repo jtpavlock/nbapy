@@ -75,11 +75,11 @@ class Details:
         """Division title victories and opponents"""
         return self.api.get_result('TeamAwardsDiv')
 
-    def hof(self):
+    def hof_players(self):
         """All team hall of fame players."""
         return self.api.get_result('TeamHof')
 
-    def retired(self):
+    def retired_players(self):
         """Retired numbers and associated info"""
         return self.api.get_result('TeamRetired')
 

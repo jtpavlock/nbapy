@@ -1,31 +1,35 @@
-from nba_stats import _api_scrape, _get_json
+from nba_stats.nba_api import NbaAPI
 from nba_stats import constants
 
 
-class BoxscoreSummary:
+class BoxScoreSummary:
     _endpoint = 'boxscoresummaryv2'
 
-    def __init__(self,
-                 game_id,
-                 season=constants.CURRENT_SEASON,
-                 season_type=constants.SeasonType.Default,
-                 range_type=constants.RangeType.Default,
-                 start_period=constants.StartPeriod.Default,
-                 end_period=constants.EndPeriod.Default,
-                 start_range=constants.StartRange.Default,
-                 end_range=constants.EndRange.Default):
-        self.json = _get_json(endpoint=self._endpoint,
-                              params={'GameID': game_id,
-                                      'Season': season,
-                                      'SeasonType': season_type,
-                                      'RangeType': range_type,
-                                      'StartPeriod': start_period,
-                                      'EndPeriod': end_period,
-                                      'StartRange': start_range,
-                                      'EndRange': end_range})
+    def __init__(
+            self,
+            game_id: str,
+            season=constants.CURRENT_SEASON,
+            season_type=constants.SeasonType.Default,
+            range_type=constants.RangeType.Default,
+            start_period=constants.StartPeriod.Default,
+            end_period=constants.EndPeriod.Default,
+            start_range=constants.StartRange.Default,
+            end_range=constants.EndRange.Default
+    ):
+        self._params = {
+            'GameID': game_id,
+            'Season': season,
+            'SeasonType': season_type,
+            'RangeType': range_type,
+            'StartPeriod': start_period,
+            'EndPeriod': end_period,
+            'StartRange': start_range,
+            'EndRange': end_range
+        }
+        self.api = NbaAPI(self._endpoint, self._params)
 
     def game_summary(self):
-        return _api_scrape(self.json, 0)
+        return self.api.json
 
     def other_stats(self):
         return _api_scrape(self.json, 1)
