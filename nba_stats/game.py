@@ -58,12 +58,12 @@ class Info:
         return self.api.get_result('AvailableVideo')
 
 
-class BoxScore(ABC):
+class _BoxScore(ABC):
     def __init__(
             self,
             game_id: str,
-            season=constants.CURRENT_SEASON: str,
-            season_type=constants.SeasonType.Default: constants.SeasonType,
+            season=constants.CURRENT_SEASON,
+            season_type=constants.SeasonType.Default,
             range_type=constants.RangeType.Default,
             start_period=constants.StartPeriod.Default,
             end_period=constants.EndPeriod.Default,

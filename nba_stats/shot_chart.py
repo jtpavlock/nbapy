@@ -7,7 +7,7 @@ class ShotChart:
 
     def __init__(
             self,
-            player_id,
+            player_id: str,
             team_id=constants.TeamID.Default,
             game_id=constants.GameID.Default,
             league_id=constants.League.Default,
