@@ -1,5 +1,4 @@
-"""
-Test player module and included endpoints.
+"""Test player module and included endpoints.
 
 We won't mock any api calls just to make sure they haven't changed on us.
 """
@@ -7,377 +6,452 @@ import pytest
 
 from nba_stats import player
 
+player_id = '1628369'  # Jayson Tatum
+vs_player_id = '2544'  # LeBron James
+
 
 class TestGetId:
     @staticmethod
     def test_valid_player():
-        player.get_id('Lebron James') == '2544'
+        player.get_id('Jayson tatum') == player_id
 
     @staticmethod
     def test_invalid_player():
         with pytest.raises(player.PlayerNotFoundException):
-            player.get_id('Lebran James')
+            player.get_id('Jaysan Tatum')
 
 
 class TestPlayerList:
     @staticmethod
     def test_players():
-        assert player.PlayerList().players() is not None
+        players = player.PlayerList().players()
+        assert players is not None
 
 
 class TestSummary:
     @staticmethod
     def test_info():
-        assert player.Summary('2544').info() is not None
+        info = player.Summary(player_id).info()
+        assert info is not None
 
     @staticmethod
     def test_headline_stats():
-        assert player.Summary('2544').headline_stats() is not None
+        headline_stats = player.Summary(player_id).headline_stats()
+        assert headline_stats is not None
 
 
 class TestSplits():
     @staticmethod
     def test_overall():
-        assert player.Splits('2544').overall() is not None
+        overall = player.Splits(player_id).overall()
+        assert overall is not None
 
 
 class TestGeneralSplits():
     @staticmethod
     def test_location():
-        assert player.GeneralSplits('2544').location() is not None
+        location = player.GeneralSplits(player_id).location()
+        assert location is not None
 
     @staticmethod
     def test_wins_losses():
-        assert player.GeneralSplits('2544').wins_losses() is not None
+        wins_losses = player.GeneralSplits(player_id).wins_losses()
+        assert wins_losses is not None
 
     @staticmethod
     def test_month():
-        assert player.GeneralSplits('2544').month() is not None
+        month = player.GeneralSplits(player_id).month()
+        assert month is not None
 
     @staticmethod
     def test_pre_post_all_star():
-        assert player.GeneralSplits('2544').pre_post_all_star() is not None
+        pre_post_all_star = player.GeneralSplits(player_id).pre_post_all_star()
+        assert pre_post_all_star is not None
 
     @staticmethod
     def test_starting_position():
-        assert player.GeneralSplits('2544').starting_position() is not None
+        starting_position = player.GeneralSplits(player_id).starting_position()
+        assert starting_position is not None
 
     @staticmethod
     def test_days_rest():
-        assert player.GeneralSplits('2544').days_rest() is not None
+        days_rest = player.GeneralSplits(player_id).days_rest()
+        assert days_rest is not None
 
 
 class TestOpponentSplits():
     @staticmethod
     def test_by_conference():
-        assert player.OpponentSplits('2544').by_conference() is not None
+        by_conference = player.OpponentSplits(player_id).by_conference()
+        assert by_conference is not None
 
     @staticmethod
     def test_by_division():
-        assert player.OpponentSplits('2544').by_division() is not None
+        by_division = player.OpponentSplits(player_id).by_division()
+        assert by_division is not None
 
     @staticmethod
     def test_by_team():
-        assert player.OpponentSplits('2544').by_team() is not None
+        by_team = player.OpponentSplits(player_id).by_team()
+        assert by_team is not None
 
 
 class TestLastNGamesSplits():
     @staticmethod
     def test_last_5():
-        assert player.LastNGamesSplits('2544').last_5() is not None
+        last_5 = player.LastNGamesSplits(player_id).last_5()
+        assert last_5 is not None
 
     @staticmethod
     def test_last_10():
-        assert player.LastNGamesSplits('2544').last_10() is not None
+        last_10 = player.LastNGamesSplits(player_id).last_10()
+        assert last_10 is not None
 
     @staticmethod
     def test_last_15():
-        assert player.LastNGamesSplits('2544').last_15() is not None
+        last_15 = player.LastNGamesSplits(player_id).last_15()
+        assert last_15 is not None
 
     @staticmethod
     def test_last_20():
-        assert player.LastNGamesSplits('2544').last_20() is not None
+        last_20 = player.LastNGamesSplits(player_id).last_20()
+        assert last_20 is not None
 
     @staticmethod
     def test_game_num():
-        assert player.LastNGamesSplits('2544').game_num() is not None
+        game_num = player.LastNGamesSplits(player_id).game_num()
+        assert game_num is not None
 
 
 class TestInGameSplits():
     @staticmethod
     def test_by_half():
-        assert player.InGameSplits('2544').by_half() is not None
+        by_half = player.InGameSplits(player_id).by_half()
+        assert by_half is not None
 
     @staticmethod
     def test_by_period():
-        assert player.InGameSplits('2544').by_period() is not None
+        by_period = player.InGameSplits(player_id).by_period()
+        assert by_period is not None
 
     @staticmethod
     def test_by_score_margin():
-        assert player.InGameSplits('2544').by_score_margin() is not None
+        by_score_margin = player.InGameSplits(player_id).by_score_margin()
+        assert by_score_margin is not None
 
     @staticmethod
     def test_by_actual_margin():
-        assert player.InGameSplits('2544').by_actual_margin() is not None
+        by_actual_margin = player.InGameSplits(player_id).by_actual_margin()
+        assert by_actual_margin is not None
 
 
 class TestClutchSplits():
     @staticmethod
     def test_last_5m_lte_5pts():
-        assert player.ClutchSplits(2554).last_5m_lte_5pts() is not None
+        last_5m_lte_5pts = player.ClutchSplits(2554).last_5m_lte_5pts()
+        assert last_5m_lte_5pts is not None
 
     @staticmethod
     def test_last_3m_lte_5pts():
-        assert player.ClutchSplits(2554).last_3m_lte_5pts() is not None
+        last_3m_lte_5pts = player.ClutchSplits(2554).last_3m_lte_5pts()
+        assert last_3m_lte_5pts is not None
 
     @staticmethod
     def test_last_1m_lte_5pts():
-        assert player.ClutchSplits(2554).last_1m_lte_5pts() is not None
+        last_1m_lte_5pts = player.ClutchSplits(2554).last_1m_lte_5pts()
+        assert last_1m_lte_5pts is not None
 
     @staticmethod
     def test_last_30s_lte_3pts():
-        assert player.ClutchSplits(2554).last_30s_lte_3pts() is not None
+        last_30s_lte_3pts = player.ClutchSplits(2554).last_30s_lte_3pts()
+        assert last_30s_lte_3pts is not None
 
     @staticmethod
     def test_last_10s_lte_3pts():
-        assert player.ClutchSplits(2554).last_10s_lte_3pts() is not None
+        last_10s_lte_3pts = player.ClutchSplits(2554).last_10s_lte_3pts()
+        assert last_10s_lte_3pts is not None
 
     @staticmethod
     def test_last_5m_pm_5pts():
-        assert player.ClutchSplits(2554).last_5m_pm_5pts() is not None
+        last_5m_pm_5pts = player.ClutchSplits(2554).last_5m_pm_5pts()
+        assert last_5m_pm_5pts is not None
 
     @staticmethod
     def test_last_3m_pm_5pts():
-        assert player.ClutchSplits(2554).last_3m_pm_5pts() is not None
+        last_3m_pm_5pts = player.ClutchSplits(2554).last_3m_pm_5pts()
+        assert last_3m_pm_5pts is not None
 
     @staticmethod
     def test_last_1m_pm_5pts():
-        assert player.ClutchSplits(2554).last_1m_pm_5pts() is not None
+        last_1m_pm_5pts = player.ClutchSplits(2554).last_1m_pm_5pts()
+        assert last_1m_pm_5pts is not None
 
 
 class TestTeamPerformanceSplits():
     @staticmethod
     def test_score_differential():
-        assert (player.TeamPerformanceSplits('2544').score_differential()
-                is not None)
+        score_diff = player.TeamPerformanceSplits(player_id).score_differential
+        assert score_diff is not None
 
     @staticmethod
     def test_points_scored():
-        assert player.TeamPerformanceSplits('2544').points_scored() is not None
+        stats = player.TeamPerformanceSplits(player_id).points_scored()
+        assert stats is not None
 
     @staticmethod
     def test_points_against():
-        assert (player.TeamPerformanceSplits('2544').points_against()
-                is not None)
+        stats = player.TeamPerformanceSplits(player_id).points_against()
+        assert stats is not None
 
 
 class TestYearOverYearSplits():
     @staticmethod
     def test_by_year():
-        assert player.YearOverYearSplits('2544').by_year() is not None
+        stats = player.YearOverYearSplits(player_id).by_year()
+        assert stats is not None
 
 
 class TestShootingSplits():
     @staticmethod
     def test_shot_5ft():
-        assert player.ShootingSplits('2544').shot_5ft() is not None
+        shot_5ft = player.ShootingSplits(player_id).shot_5ft()
+        assert shot_5ft is not None
 
     @staticmethod
     def test_shot_8ft():
-        assert player.ShootingSplits('2544').shot_8ft() is not None
+        shot_8ft = player.ShootingSplits(player_id).shot_8ft()
+        assert shot_8ft is not None
 
     @staticmethod
     def test_shot_areas():
-        assert player.ShootingSplits('2544').shot_areas() is not None
+        shot_areas = player.ShootingSplits(player_id).shot_areas()
+        assert shot_areas is not None
 
     @staticmethod
     def test_assisted_shots():
-        assert player.ShootingSplits('2544').assisted_shots() is not None
+        assisted_shots = player.ShootingSplits(player_id).assisted_shots()
+        assert assisted_shots is not None
 
     @staticmethod
     def test_shot_types_summary():
-        assert player.ShootingSplits('2544').shot_types_summary() is not None
+        stats = player.ShootingSplits(player_id).shot_types_summary()
+        assert stats is not None
 
     @staticmethod
     def test_shot_types_detail():
-        assert player.ShootingSplits('2544').shot_types_detail() is not None
+        stats = player.ShootingSplits(player_id).shot_types_detail()
+        assert stats is not None
 
     @staticmethod
     def test_assisted_by():
-        assert player.ShootingSplits('2544').assisted_by() is not None
+        assisted_by = player.ShootingSplits(player_id).assisted_by()
+        assert assisted_by is not None
 
 
 class TestCareer():
     @staticmethod
     def test_reg_season_splits():
-        assert player.Career('2544').reg_season_splits() is not None
+        reg_season_splits = player.Career(player_id).reg_season_splits()
+        assert reg_season_splits is not None
 
     @staticmethod
     def test_reg_season_splits_career():
-        assert player.Career('2544').reg_season_splits(True) is not None
+        stats = player.Career(player_id).reg_season_splits(True)
+        assert stats is not None
 
     @staticmethod
     def test_post_season_splits():
-        assert player.Career('2544').post_season_splits() is not None
+        post_season_splits = player.Career(player_id).post_season_splits()
+        assert post_season_splits is not None
 
     @staticmethod
     def test_post_season_splits_career():
-        assert player.Career('2544').post_season_splits(True) is not None
+        stats = player.Career(player_id).post_season_splits(True)
+        assert stats is not None
 
     @staticmethod
     def test_all_star_season_splits():
-        assert player.Career('2544').all_star_season_splits() is not None
+        stats = player.Career(player_id).all_star_season_splits()
+        assert stats is not None
 
     @staticmethod
     def test_all_star_season_splits_career():
-        assert player.Career('2544').all_star_season_splits(True) is not None
+        stats = player.Career(player_id).all_star_season_splits(True)
+        assert stats is not None
 
     @staticmethod
     def test_college_season_splits():
-        assert player.Career('2544').college_season_splits() is not None
+        stats = player.Career(player_id).college_season_splits()
+        assert stats is not None
 
     @staticmethod
     def test_college_season_splits_career():
-        assert player.Career('2544').college_season_splits(True) is not None
+        stats = player.Career(player_id).college_season_splits(True)
+        assert stats is not None
 
     @staticmethod
     def test_reg_season_rankings():
-        assert player.Career('2544').reg_season_rankings() is not None
+        stats = player.Career(player_id).reg_season_rankings()
+        assert stats is not None
 
     @staticmethod
     def test_post_season_rankings():
-        assert player.Career('2544').post_season_rankings() is not None
+        stats = player.Career(player_id).post_season_rankings()
+        assert stats is not None
 
     @staticmethod
     def test_season_highs():
-        assert player.Career('2544').season_highs() is not None
+        stats = player.Career(player_id).season_highs()
+        assert stats is not None
 
     @staticmethod
     def test_career_highs():
-        assert player.Career('2544').career_highs() is not None
+        stats = player.Career(player_id).career_highs()
+        assert stats is not None
 
     @staticmethod
     def test_next_game():
-        assert player.Career('2544').next_game() is not None
+        stats = player.Career(player_id).next_game()
+        assert stats is not None
 
 
 class TestGameLogs():
     @staticmethod
     def test_logs():
-        assert player.GameLogs('2544').logs() is not None
+        stats = player.GameLogs(player_id).logs()
+        assert stats is not None
 
 
 class TestShotTracking():
     @staticmethod
     def test_overall():
-        assert player.ShotTracking('2544').overall() is not None
+        stats = player.ShotTracking(player_id).overall()
+        assert stats is not None
 
     @staticmethod
     def test_general():
-        assert player.ShotTracking('2544').general() is not None
+        stats = player.ShotTracking(player_id).general()
+        assert stats is not None
 
     @staticmethod
     def test_shot_clock():
-        assert player.ShotTracking('2544').shot_clock() is not None
+        stats = player.ShotTracking(player_id).shot_clock()
+        assert stats is not None
 
     @staticmethod
     def test_dribble():
-        assert player.ShotTracking('2544').dribbles() is not None
+        stats = player.ShotTracking(player_id).dribbles()
+        assert stats is not None
 
     @staticmethod
     def test_closest_defender():
-        assert player.ShotTracking('2544').closest_defender() is not None
+        stats = player.ShotTracking(player_id).closest_defender()
+        assert stats is not None
 
     @staticmethod
     def test_closest_defender_long():
-        assert player.ShotTracking('2544').closest_defender_long() is not None
+        stats = player.ShotTracking(player_id).closest_defender_long()
+        assert stats is not None
 
     @staticmethod
     def test_touch_time():
-        assert player.ShotTracking('2544').touch_time() is not None
+        stats = player.ShotTracking(player_id).touch_time()
+        assert stats is not None
 
 
 class TestReboundTracking():
     @staticmethod
     def test_overall():
-        assert player.ReboundTracking('2544').overall() is not None
+        stats = player.ReboundTracking(player_id).overall()
+        assert stats is not None
 
     @staticmethod
     def test_shot_type():
-        assert player.ReboundTracking('2544').shot_type() is not None
+        stats = player.ReboundTracking(player_id).shot_type()
+        assert stats is not None
 
     @staticmethod
     def test_num_contested():
-        assert player.ReboundTracking('2544').num_contested() is not None
+        stats = player.ReboundTracking(player_id).num_contested()
+        assert stats is not None
 
     @staticmethod
     def test_shot_distance():
-        assert player.ReboundTracking('2544').shot_distance() is not None
+        stats = player.ReboundTracking(player_id).shot_distance()
+        assert stats is not None
 
     @staticmethod
     def test_rebound_distance():
-        assert player.ReboundTracking('2544').rebound_distance() is not None
+        stats = player.ReboundTracking(player_id).rebound_distance()
+        assert stats is not None
 
 
 class TestPassTracking():
     @staticmethod
     def test_made():
-        assert player.PassTracking('2544').made() is not None
+        stats = player.PassTracking(player_id).made()
+        assert stats is not None
 
     @staticmethod
     def test_received():
-        assert player.PassTracking('2544').received() is not None
+        stats = player.PassTracking(player_id).received()
+        assert stats is not None
 
 
 class TestDefenseTracking():
     @staticmethod
     def test_shot_types():
-        assert player.DefenseTracking('2544').shot_types() is not None
+        stats = player.DefenseTracking(player_id).shot_types()
+        assert stats is not None
 
 
 class TestVsPlayer():
     @staticmethod
     def test_overall():
-        assert player.VsPlayer('2544', '1628369').overall() is not None
+        stats = player.VsPlayer(player_id, vs_player_id).overall()
+        assert stats is not None
 
     @staticmethod
     def test_on_off_court():
-        assert player.VsPlayer('2544', '1628369').on_off_court() is not None
+        stats = player.VsPlayer(player_id, vs_player_id).on_off_court()
+        assert stats is not None
 
     @staticmethod
     def test_shot_dist_overall():
-        assert (player.VsPlayer('2544', '1628369').shot_dist_overall()
-                is not None)
+        stats = player.VsPlayer(player_id, vs_player_id).shot_dist_overall()
+        assert stats is not None
 
     @staticmethod
     def test_shot_dist_on_court():
-        assert (player.VsPlayer('2544', '1628369').shot_dist_on_court()
-                is not None)
+        stats = player.VsPlayer(player_id, vs_player_id).shot_dist_on_court()
+        assert stats is not None
 
     @staticmethod
     def test_shot_dist_off_court():
-        assert (player.VsPlayer('2544', '1628369').shot_dist_off_court()
-                is not None)
+        stats = player.VsPlayer(player_id, vs_player_id).shot_dist_off_court()
+        assert stats is not None
 
     @staticmethod
     def test_shot_area_overall():
-        assert (player.VsPlayer('2544', '1628369').shot_area_overall()
-                is not None)
+        stats = player.VsPlayer(player_id, vs_player_id).shot_area_overall()
+        assert stats is not None
 
     @staticmethod
     def test_shot_area_on_court():
-        assert (player.VsPlayer('2544', '1628369').shot_area_on_court()
-                is not None)
+        stats = player.VsPlayer(player_id, vs_player_id).shot_area_on_court()
+        assert stats is not None
 
     @staticmethod
     def test_shot_area_off_court():
-        assert (player.VsPlayer('2544', '1628369').shot_area_off_court()
-                is not None)
+        stats = player.VsPlayer(player_id, vs_player_id).shot_area_off_court()
+        assert stats is not None
 
     @staticmethod
     def test_player_info():
-        assert player.VsPlayer('2544', '1628369').player_info() is not None
+        stats = player.VsPlayer(player_id, vs_player_id).player_info()
+        assert stats is not None
 
     @staticmethod
     def test_vs_player_info():
-        assert player.VsPlayer('2544', '1628369').vs_player_info() is not None
+        stats = player.VsPlayer(player_id, vs_player_id).vs_player_info()
+        assert stats is not None
