@@ -5,7 +5,7 @@ with open('README.md', 'r') as readme:
 
 setup(
     name='nba_stats',
-    version='0.0.0',
+    version='1.0.1',
     description='Python client for NBA statistics located at nba.com',
     long_description=LONG_DESCRIPTION,
     url='https://github.com/jtpavlock/nba_stats',
