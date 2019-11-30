@@ -101,8 +101,7 @@ class Summary:
 
 
 class Splits:
-    """
-    Player stats splits.
+    """Player stats splits.
 
     Also a base class containing common arguments for different split type
     child classes.
