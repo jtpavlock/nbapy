@@ -44,15 +44,9 @@ class NbaAPI():
         """
         # result_set can either be under 'resultSets' or 'resultSet'
         if result_set_name:
-            try:
-                result_set = next(
-                    (res for res in self.json['resultSets']
-                     if res['name'] == result_set_name), None)
-            except KeyError:
-                # maybe it's under 'resultSet'
-                result_set = next(
-                    (res for res in self.json['resultSet']
-                     if res['name'] == result_set_name), None)
+            result_set = next(
+                (res for res in self.json['resultSets']
+                 if res['name'] == result_set_name), None)
         else:
             # there should only be one resultSet to lookup
             try:
@@ -67,8 +61,7 @@ class NbaAPI():
         return pd.DataFrame(values, columns=headers)
 
     def _get_json(self):
-        """
-        Internal method to streamline our requests / json getting
+        """Internal method to streamline our requests / json getting
 
         Args:
             params (dict): parameters to be passed to the API
