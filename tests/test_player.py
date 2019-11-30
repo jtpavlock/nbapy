@@ -21,8 +21,8 @@ class TestGetId:
 
 class TestPlayerList:
     @staticmethod
-    def test_results():
-        assert player.PlayerList().results() is not None
+    def test_players():
+        assert player.PlayerList().players() is not None
 
 
 class TestSummary:
@@ -42,7 +42,6 @@ class TestSplits():
 
 
 class TestGeneralSplits():
-
     @staticmethod
     def test_location():
         assert player.GeneralSplits(2544).location() is not None
@@ -65,7 +64,7 @@ class TestGeneralSplits():
 
     @staticmethod
     def test_days_rest():
-        assert player.GeneralSplits(2544).overall() is not None
+        assert player.GeneralSplits(2544).days_rest() is not None
 
 
 class TestOpponentSplits():
@@ -100,8 +99,8 @@ class TestLastNGamesSplits():
         assert player.LastNGamesSplits(2544).last_20() is not None
 
     @staticmethod
-    def test_last_5():
-        assert player.LastNGamesSplits(2544).last_5() is not None
+    def test_game_num():
+        assert player.LastNGamesSplits(2544).game_num() is not None
 
 
 class TestInGameSplits():
@@ -263,8 +262,8 @@ class TestCareer():
 
 class TestGameLogs():
     @staticmethod
-    def test_results():
-        assert player.GameLogs(2544).results() is not None
+    def test_logs():
+        assert player.GameLogs(2544).logs() is not None
 
 
 class TestShotTracking():
@@ -335,7 +334,7 @@ class TestDefenseTracking():
         assert player.DefenseTracking(2544).shot_types() is not None
 
 
-class TestPlayerVsPlayer():
+class TestVsPlayer():
     @staticmethod
     def test_overall():
         assert player.VsPlayer(2544, 1628369).overall() is not None

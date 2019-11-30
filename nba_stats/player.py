@@ -13,8 +13,7 @@ def get_id(
         season=constants.CURRENT_SEASON,
         active_only=1,
 ):
-    """
-    Get a player_id for any specified player.
+    """Get a player_id for any specified player.
 
     Calls PlayerList, then matches name to return the id. Player id is needed
     for most of our player functions.
@@ -34,7 +33,7 @@ def get_id(
     name = name.lower()
 
     players = pd.DataFrame(
-        PlayerList(season=season, active_only=active_only).results())
+        PlayerList(season=season, active_only=active_only).players())
 
     player = players.loc[players['DISPLAY_FIRST_LAST'].str.lower() == name,
                          'PERSON_ID']
@@ -49,8 +48,7 @@ def get_id(
 
 
 class PlayerList:
-    """
-    Contains a list of players and their teams.
+    """Contains a list of players and their teams.
 
     Args:
         league_id: ID for the league to look in
@@ -77,7 +75,7 @@ class PlayerList:
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
-    def results(self):
+    def players(self):
         return self.api.get_result()
 
 
@@ -197,8 +195,7 @@ class Splits:
 
 
 class GeneralSplits(Splits):
-    """
-    Contains stats pertaining to location, wins and losses, pre/post all star
+    """Contains stats pertaining to location, wins and losses, pre/post all star
     break, starting position, and numbers of days rest
 
     Args:
@@ -226,9 +223,8 @@ class GeneralSplits(Splits):
 
 
 class OpponentSplits(Splits):
-    """
-    Contains stats pertaining to player stats vs certain opponents by division,
-    conference, and by specific team opponent
+    """Contains stats pertaining to player stats vs certain opponents by
+    division, conference, and by specific team opponent
 
     Args:
         see Splits
@@ -246,9 +242,8 @@ class OpponentSplits(Splits):
 
 
 class LastNGamesSplits(Splits):
-    """
-    Contains players stats per last 5, 10, 15, and 20 games, or specified
-    number of games.
+    """Contains players stats per last 5, 10, 15, and 20 games, or
+    specified number of games.
 
     Args:
         see Splits
@@ -267,15 +262,14 @@ class LastNGamesSplits(Splits):
     def last_20(self):
         return self.api.get_result('Last20PlayerDashboard')
 
-    def gamenumber(self):
+    def game_num(self):
         """Stats for sets of 10 games"""
         return self.api.get_result('GameNumberPlayerDashboard')
 
 
 class InGameSplits(Splits):
-    """
-    Contains player stats by half, by quarter, by score margin, and by actual
-    margins.
+    """Contains player stats by half, by quarter, by score margin,
+    and by actual margins.
 
     Args:
         see Splits
@@ -296,8 +290,8 @@ class InGameSplits(Splits):
 
 
 class ClutchSplits(Splits):
-    """
-    Contains a lot of methods for last n minutes with a deficit of x points
+    """Contains a lot of methods for last n minutes with a deficit of
+    x points.
 
     Args:
         see Splits
@@ -338,8 +332,7 @@ class ClutchSplits(Splits):
 
 
 class TeamPerformanceSplits(Splits):
-    """
-    Player stats by different team performance metrics such as score
+    """Player stats by different team performance metrics such as score
     differential, points scored, and points scored against.
 
     Args:
@@ -358,9 +351,8 @@ class TeamPerformanceSplits(Splits):
 
 
 class YearOverYearSplits(Splits):
-    """
-    Displays player stats over the given season and over all seasons in the
-    given league
+    """Displays player stats over the given season and over all seasons in
+    the given league.
 
     Args:
         see Splits
@@ -372,8 +364,7 @@ class YearOverYearSplits(Splits):
 
 
 class ShootingSplits(Splits):
-    """
-    Shooting stats based on distance, area, assisted to, shot types, and
+    """Stats based on shot distance, area, assisted to, shot types, and
     assisted by.
 
     Args:
@@ -499,8 +490,7 @@ class Career:
 
 
 class GameLogs:
-    """
-    Contains a full log of all the games for a player for a given season
+    """Contains a full log of all the games for a player for a given season
 
     Args:
         player_id: ID of the player to look up
@@ -525,13 +515,12 @@ class GameLogs:
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
-    def results(self):
+    def logs(self):
         return self.api.get_result('PlayerGameLog')
 
 
 class ShotTracking(Splits):
-    """
-    Tracking data for shooting for a given player
+    """Tracking data for shooting for a given player
 
     Args:
         see Splits
@@ -561,8 +550,7 @@ class ShotTracking(Splits):
 
 
 class ReboundTracking(Splits):
-    """
-    Tracking data for rebounding for a given player
+    """Tracking data for rebounding for a given team
 
     Args:
         see Splits
@@ -586,8 +574,7 @@ class ReboundTracking(Splits):
 
 
 class PassTracking(Splits):
-    """
-    Tracking data for passing for a given player
+    """Tracking data for passing for a given team
 
     Args:
         see Splits
@@ -615,8 +602,7 @@ class DefenseTracking(Splits):
 
 
 class VsPlayer:
-    """
-    Contains general stats that pertain to players going against other players
+    """Contains general stats that pertain to players against other players
 
     Args:
         :player_id: ID of the player to look up
