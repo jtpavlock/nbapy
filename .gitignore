@@ -62,4 +62,4 @@ docs/_build/
 target/
 
 # requests_cache cache file
-/cache.sqlite
+*cache.sqlite
