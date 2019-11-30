@@ -55,7 +55,7 @@ class Lineups:
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
-    def results(self):
+    def lineups(self):
         return self.api.get_result()
 
 
@@ -128,7 +128,7 @@ class TeamStats:
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
-    def results(self):
+    def stats(self):
         return self.api.get_result()
 
 
@@ -211,7 +211,7 @@ class PlayerStats:
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
-    def results(self):
+    def stats(self):
         return self.api.get_result()
 
 
@@ -289,7 +289,7 @@ class PlayerTrackingStats:
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
-    def results(self):
+    def stats(self):
         return self.api.get_result()
 
 
@@ -316,5 +316,5 @@ class LeagueLeaders:
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
-    def results(self):
+    def players(self):
         return self.api.get_result()

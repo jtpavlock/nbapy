@@ -9,28 +9,28 @@ from nba_stats import league
 class TestLineups:
     @staticmethod
     def test_results():
-        assert league.Lineups().results() is not None
+        assert league.Lineups().lineups() is not None
 
 
-class TestStats:
+class TestTeamStats:
     @staticmethod
     def test_results():
-        assert league.TeamStats().results() is not None
+        assert league.TeamStats().stats() is not None
 
 
 class TestPlayerStats:
     @staticmethod
     def test_results():
-        assert league.PlayerStats().results() is not None
+        assert league.PlayerStats().stats() is not None
 
 
-class TestTrackingStats:
+class TestPlayerTrackingStats:
     @staticmethod
     def test_results():
-        assert league.PlayerTrackingStats().results() is not None
+        assert league.PlayerTrackingStats().stats() is not None
 
 
 class TestLeagueLeaders:
     @staticmethod
     def test_results():
-        assert league.LeagueLeaders().results() is not None
+        assert league.LeagueLeaders().players() is not None
