@@ -2,7 +2,7 @@
 
 We won't mock any api calls just to make sure they haven't changed on us.
 """
-from nba_stats import game
+from nbapy import game
 
 game_id = '0021900017'
 

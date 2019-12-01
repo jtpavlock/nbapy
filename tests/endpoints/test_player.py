@@ -4,7 +4,7 @@ We won't mock any api calls just to make sure they haven't changed on us.
 """
 import pytest
 
-from nba_stats import player
+from nbapy import player
 
 player_id = '1628369'  # Jayson Tatum
 vs_player_id = '2544'  # LeBron James

@@ -2,7 +2,7 @@
 
 We won't mock any api calls just to make sure they haven't changed on us.
 """
-from nba_stats import team
+from nbapy import team
 
 team_id = '1610612738'  # Celtics
 player_id = '2544'  # LeBron James

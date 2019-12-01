@@ -1,7 +1,7 @@
 from abc import ABC
 
-from nba_stats.nba_api import NbaAPI
-from nba_stats import constants
+from nbapy.nba_api import NbaAPI
+from nbapy import constants
 
 
 class Info:

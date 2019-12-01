@@ -4,13 +4,13 @@ with open('README.md', 'r') as readme:
     LONG_DESCRIPTION = readme.read()
 
 setup(
-    name='nba_stats',
+    name='nbapy',
     version='1.0.1',
     description='Python client for NBA statistics located at nba.com',
     long_description=LONG_DESCRIPTION,
-    url='https://github.com/jtpavlock/nba_stats',
+    url='https://github.com/jtpavlock/nbapy',
     packages=[
-        'nba_stats',
+        'nbapy',
     ],
     install_requires=[
         'requests',

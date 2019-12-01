@@ -1,7 +1,7 @@
 import pandas as pd
 
-from nba_stats.nba_api import NbaAPI
-from nba_stats import constants
+from nbapy.nba_api import NbaAPI
+from nbapy import constants
 
 
 class PlayerNotFoundException(Exception):

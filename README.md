@@ -1,7 +1,7 @@
-# *nba_stats - [stats.nba.com](https://stats.nba.com) API for python*
+# *nbapy - [stats.nba.com](https://stats.nba.com) API for python*
 
 ## Documentation
-An ongoing process, but check out the [wiki](https://github.com/jtpavlock/nba_stats/wiki) or feel free to poke around the codebase.
+An ongoing process, but check out the [wiki](https://github.com/jtpavlock/nbapy/wiki) or feel free to poke around the codebase.
 
 ## Summary
 A python facing API for stats.nba.com (Still in heavy development)
@@ -10,7 +10,7 @@ A python facing API for stats.nba.com (Still in heavy development)
 NOTE: Developmental builds, are by no means stable If you want the stable version use:
 
 ```
-$ pip install nba_stats
+$ pip install nbapy
 ```
 
 Else:
@@ -27,7 +27,7 @@ $ pip install .
 
 ## Planned development
 ### 1. Documentation
-- All around documentation not only of nba_stats but also stats.nba.com (it's pretty nonexistent)
+- All around documentation not only of nbapy but also stats.nba.com (it's pretty nonexistent)
 
 ## Development
 #### 1. Fork the repository and create a feature/bug fix branch
