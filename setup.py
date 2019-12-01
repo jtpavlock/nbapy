@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 with open('README.md', 'r') as readme:
     LONG_DESCRIPTION = readme.read()
