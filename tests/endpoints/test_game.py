@@ -73,24 +73,24 @@ class TestBoxscore:
 
 class TestBoxScoreScoring:
     @staticmethod
-    def test_players():
+    def test_players_stats():
         stats = game.BoxScoreScoring(game_id).players_stats()
         assert stats is not None
 
     @staticmethod
-    def test_team():
+    def test_team_stats():
         stats = game.BoxScoreScoring(game_id).team_stats()
         assert stats is not None
 
 
 class TestBoxScoreUsage:
     @staticmethod
-    def test_players():
+    def test_players_stats():
         stats = game.BoxScoreUsage(game_id).players_stats()
         assert stats is not None
 
     @staticmethod
-    def test_team():
+    def test_team_stats():
         stats = game.BoxScoreUsage(game_id).team_stats()
         assert stats is not None
 
@@ -109,24 +109,24 @@ class TestBoxScoreMisc:
 
 class TestBoxScoreAdvanced:
     @staticmethod
-    def test_players():
+    def test_players_stats():
         stats = game.BoxScoreAdvanced(game_id).players_stats()
         assert stats is not None
 
     @staticmethod
-    def test_team():
+    def test_team_stats():
         stats = game.BoxScoreAdvanced(game_id).team_stats()
         assert stats is not None
 
 
 class TestBoxScoreFourFactors:
     @staticmethod
-    def test_players():
+    def test_players_stats():
         stats = game.BoxScoreFourFactors(game_id).players_stats()
         assert stats is not None
 
     @staticmethod
-    def test_team():
+    def test_team_stats():
         stats = game.BoxScoreFourFactors(game_id).team_stats()
         assert stats is not None
 
@@ -150,7 +150,7 @@ class TestPlayByPlay:
         assert available_video is not None
 
 
-class TestHustleStats:
+class TestBoxScoreHustle:
     @staticmethod
     def test_players_stats():
         stats = game.BoxScoreHustle(game_id).players_stats()
