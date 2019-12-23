@@ -1,7 +1,7 @@
 # *nbapy - [stats.nba.com](https://stats.nba.com) API for python*
 
 ## Documentation
-An ongoing process, but check out the [wiki](https://github.com/jtpavlock/nbapy/wiki) or feel free to poke around the codebase.
+An ongoing process, but check out the [wiki](https://github.com/jtpavlock/nbapy/wiki), the [jupyter notebook docs](https://github.com/jtpavlock/nbapy/tree/master/docs/), or feel free to poke around the codebase.
 
 ## Summary
 A python facing API for stats.nba.com (Still in heavy development)
