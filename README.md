@@ -25,10 +25,6 @@ $ pip install .
 - [requests](http://www.python-requests.org/en/latest/)
 - [pandas](https://pandas.pydata.org/)
 
-## Planned development
-### 1. Documentation
-- All around documentation not only of nbapy but also stats.nba.com (it's pretty nonexistent)
-
 ## Development
 #### 1. Fork the repository and create a feature/bug fix branch
 
@@ -48,4 +44,4 @@ $ pip install .
 Other ways to contribute involve submitting any issues or adding some documentation!
 
 ## To-Do
-- Jupyter Notebook documentation
+- Finish Jupyter Notebook documentation
