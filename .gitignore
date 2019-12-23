@@ -63,3 +63,6 @@ target/
 
 # requests_cache cache file
 *cache.sqlite
+
+# Jupyter Notebook checkpoints
+*ipynb_checkpoint*
