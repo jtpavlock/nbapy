@@ -75,7 +75,8 @@ class NbaAPI():
         _get = get(
             self.BASE_URL + self.endpoint,
             params=self.params,
-            headers=self.HEADERS)
+            headers=self.HEADERS
+        )
         _get.raise_for_status()
 
         return _get.json()
