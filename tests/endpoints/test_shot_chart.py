@@ -4,7 +4,7 @@ We won't mock any api calls just to make sure they haven't changed on us.
 """
 from nbapy import shot_chart
 
-player_id = '1628369'  # Jayson Tatum
+player_id = "1628369"  # Jayson Tatum
 
 
 class TestShotChart:

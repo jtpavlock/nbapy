@@ -4,7 +4,7 @@ We won't mock any api calls just to make sure they haven't changed on us.
 """
 from nbapy import game
 
-game_id = '0021900017'
+game_id = "0021900017"
 
 
 class Info:

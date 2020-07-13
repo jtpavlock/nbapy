@@ -4,8 +4,8 @@ We won't mock any api calls just to make sure they haven't changed on us.
 """
 from nbapy import team
 
-team_id = '1610612738'  # Celtics
-player_id = '2544'  # LeBron James
+team_id = "1610612738"  # Celtics
+player_id = "2544"  # LeBron James
 
 
 class TestList:
@@ -69,7 +69,7 @@ class TestDetails:
         assert team_retired_players is not None
 
 
-class TestCommonRoster():
+class TestCommonRoster:
     @staticmethod
     def test_roster():
         team_roster = team.CommonRoster(team_id).roster()
@@ -81,14 +81,14 @@ class TestCommonRoster():
         assert team_coaches is not None
 
 
-class TestSplits():
+class TestSplits:
     @staticmethod
     def test_overall():
         team_overall = team.Splits(team_id).overall()
         assert team_overall is not None
 
 
-class TestGeneralSplits():
+class TestGeneralSplits:
     @staticmethod
     def test_location():
         team_location = team.GeneralSplits(team_id).location()
@@ -115,14 +115,14 @@ class TestGeneralSplits():
         assert team_days_rest is not None
 
 
-class TestLineupSplits():
+class TestLineupSplits:
     @staticmethod
     def test_lineups():
         team_lineups = team.LineupSplits(team_id).lineups()
         assert team_lineups is not None
 
 
-class TestOpponentSplits():
+class TestOpponentSplits:
     @staticmethod
     def test_by_conference():
         team_by_conference = team.OpponentSplits(team_id).by_conference()
@@ -139,7 +139,7 @@ class TestOpponentSplits():
         assert team_by_team is not None
 
 
-class TestLastNGamesSplits():
+class TestLastNGamesSplits:
     @staticmethod
     def test_last_5():
         team_last_5 = team.LastNGamesSplits(team_id).last_5()
@@ -166,7 +166,7 @@ class TestLastNGamesSplits():
         assert team_game_num is not None
 
 
-class TestInGameSplits():
+class TestInGameSplits:
     @staticmethod
     def test_by_half():
         team_by_half = team.InGameSplits(team_id).by_half()
@@ -188,7 +188,7 @@ class TestInGameSplits():
         assert team_by_actual_margin is not None
 
 
-class TestClutchSplits():
+class TestClutchSplits:
     @staticmethod
     def test_last_5m_lte_5pts():
         team_last_5m_lte_5pts = team.ClutchSplits(2554).last_5m_lte_5pts()
@@ -230,7 +230,7 @@ class TestClutchSplits():
         assert team_last_1m_pm_5pts is not None
 
 
-class TestShootingSplits():
+class TestShootingSplits:
     @staticmethod
     def test_shot_5ft():
         team_shot_5ft = team.ShootingSplits(team_id).shot_5ft()
@@ -262,7 +262,7 @@ class TestShootingSplits():
         assert team_assisted_by is not None
 
 
-class TestPerformanceSplits():
+class TestPerformanceSplits:
     @staticmethod
     def test_score_differential():
         team_score_diff = team.PerformanceSplits(team_id).score_differential()
@@ -279,14 +279,14 @@ class TestPerformanceSplits():
         assert team_points_against is not None
 
 
-class TestPlayerSplits():
+class TestPlayerSplits:
     @staticmethod
     def test_players():
         team_players = team.PlayerSplits(team_id).players()
         assert team_players is not None
 
 
-class TestPlayerOnOffSplits():
+class TestPlayerOnOffSplits:
     @staticmethod
     def test_on_court():
         team_on_court = team.PlayerOnOffSplits(team_id).on_court()
@@ -298,7 +298,7 @@ class TestPlayerOnOffSplits():
         assert team_off_court is not None
 
 
-class TestPlayerOnOffSummary():
+class TestPlayerOnOffSummary:
     @staticmethod
     def test_on_court():
         team_on_court = team.PlayerOnOffSummary(team_id).on_court()
@@ -310,14 +310,14 @@ class TestPlayerOnOffSummary():
         assert team_off_court is not None
 
 
-class TestYearOverYearSplits():
+class TestYearOverYearSplits:
     @staticmethod
     def test_by_year():
         team_by_year = team.YearOverYearSplits(team_id).by_year()
         assert team_by_year is not None
 
 
-class TestShotTracking():
+class TestShotTracking:
     @staticmethod
     def test_general():
         team_general = team.ShotTracking(team_id).general()
@@ -349,7 +349,7 @@ class TestShotTracking():
         assert team_touch_time is not None
 
 
-class TestReboundTracking():
+class TestReboundTracking:
     @staticmethod
     def test_overall():
         team_overall = team.ReboundTracking(team_id).overall()
@@ -376,7 +376,7 @@ class TestReboundTracking():
         assert stats is not None
 
 
-class TestPassTracking():
+class TestPassTracking:
     @staticmethod
     def test_made():
         team_made = team.PassTracking(team_id).made()
@@ -388,21 +388,21 @@ class TestPassTracking():
         assert team_received is not None
 
 
-class TestGameLogs():
+class TestGameLogs:
     @staticmethod
     def test_logs():
         team_logs = team.GameLogs(team_id).logs()
         assert team_logs is not None
 
 
-class TestSeasonResults():
+class TestSeasonResults:
     @staticmethod
     def test_results():
         team_results = team.SeasonResults(team_id).results()
         assert team_results is not None
 
 
-class TestVsPlayer():
+class TestVsPlayer:
     @staticmethod
     def test_overall():
         stats = team.VsPlayer(team_id, player_id).overall()

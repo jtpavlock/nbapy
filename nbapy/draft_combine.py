@@ -3,17 +3,12 @@ from nbapy import constants
 
 
 class Summary:
-    _endpoint = 'draftcombinestats'
+    _endpoint = "draftcombinestats"
 
     def __init__(
-            self,
-            league_id=constants.League.Default,
-            season=constants.CURRENT_SEASON
+        self, league_id=constants.League.Default, season=constants.CURRENT_SEASON
     ):
-        self._params = {
-            'LeagueID': league_id,
-            'SeasonYear': season
-        }
+        self._params = {"LeagueID": league_id, "SeasonYear": season}
         self.api = NbaAPI(self._endpoint, self._params)
 
     def stats(self):
@@ -21,17 +16,12 @@ class Summary:
 
 
 class DrillResults:
-    _endpoint = 'draftcombinedrillresults'
+    _endpoint = "draftcombinedrillresults"
 
     def __init__(
-            self,
-            league_id=constants.League.Default,
-            season=constants.CURRENT_SEASON
+        self, league_id=constants.League.Default, season=constants.CURRENT_SEASON
     ):
-        self._params = {
-            'LeagueID': league_id,
-            'SeasonYear': season
-        }
+        self._params = {"LeagueID": league_id, "SeasonYear": season}
         self.api = NbaAPI(self._endpoint, self._params)
 
     def stats(self):
@@ -39,17 +29,12 @@ class DrillResults:
 
 
 class SpotShooting:
-    _endpoint = 'draftcombinespotshooting'
+    _endpoint = "draftcombinespotshooting"
 
     def __init__(
-            self,
-            league_id=constants.League.Default,
-            season=constants.CURRENT_SEASON
+        self, league_id=constants.League.Default, season=constants.CURRENT_SEASON
     ):
-        self._params = {
-            'LeagueID': league_id,
-            'SeasonYear': season
-        }
+        self._params = {"LeagueID": league_id, "SeasonYear": season}
         self.api = NbaAPI(self._endpoint, self._params)
 
     def stats(self):

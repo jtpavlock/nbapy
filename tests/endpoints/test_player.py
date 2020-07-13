@@ -6,19 +6,19 @@ import pytest
 
 from nbapy import player
 
-player_id = '1628369'  # Jayson Tatum
-vs_player_id = '2544'  # LeBron James
+player_id = "1628369"  # Jayson Tatum
+vs_player_id = "2544"  # LeBron James
 
 
 class TestGetId:
     @staticmethod
     def test_valid_player():
-        player.get_id('Jayson tatum') == player_id
+        player.get_id("Jayson tatum") == player_id
 
     @staticmethod
     def test_invalid_player():
         with pytest.raises(player.PlayerNotFoundException):
-            player.get_id('Jaysan Tatum')
+            player.get_id("Jaysan Tatum")
 
 
 class TestPlayerList:
@@ -40,14 +40,14 @@ class TestSummary:
         assert headline_stats is not None
 
 
-class TestSplits():
+class TestSplits:
     @staticmethod
     def test_overall():
         overall = player.Splits(player_id).overall()
         assert overall is not None
 
 
-class TestGeneralSplits():
+class TestGeneralSplits:
     @staticmethod
     def test_location():
         location = player.GeneralSplits(player_id).location()
@@ -79,7 +79,7 @@ class TestGeneralSplits():
         assert days_rest is not None
 
 
-class TestOpponentSplits():
+class TestOpponentSplits:
     @staticmethod
     def test_by_conference():
         by_conference = player.OpponentSplits(player_id).by_conference()
@@ -96,7 +96,7 @@ class TestOpponentSplits():
         assert by_team is not None
 
 
-class TestLastNGamesSplits():
+class TestLastNGamesSplits:
     @staticmethod
     def test_last_5():
         last_5 = player.LastNGamesSplits(player_id).last_5()
@@ -123,7 +123,7 @@ class TestLastNGamesSplits():
         assert game_num is not None
 
 
-class TestInGameSplits():
+class TestInGameSplits:
     @staticmethod
     def test_by_half():
         by_half = player.InGameSplits(player_id).by_half()
@@ -145,7 +145,7 @@ class TestInGameSplits():
         assert by_actual_margin is not None
 
 
-class TestClutchSplits():
+class TestClutchSplits:
     @staticmethod
     def test_last_5m_lte_5pts():
         last_5m_lte_5pts = player.ClutchSplits(2554).last_5m_lte_5pts()
@@ -187,7 +187,7 @@ class TestClutchSplits():
         assert last_1m_pm_5pts is not None
 
 
-class TestTeamPerformanceSplits():
+class TestTeamPerformanceSplits:
     @staticmethod
     def test_score_differential():
         score_diff = player.TeamPerformanceSplits(player_id).score_differential
@@ -204,14 +204,14 @@ class TestTeamPerformanceSplits():
         assert stats is not None
 
 
-class TestYearOverYearSplits():
+class TestYearOverYearSplits:
     @staticmethod
     def test_by_year():
         stats = player.YearOverYearSplits(player_id).by_year()
         assert stats is not None
 
 
-class TestShootingSplits():
+class TestShootingSplits:
     @staticmethod
     def test_shot_5ft():
         shot_5ft = player.ShootingSplits(player_id).shot_5ft()
@@ -248,7 +248,7 @@ class TestShootingSplits():
         assert assisted_by is not None
 
 
-class TestCareer():
+class TestCareer:
     @staticmethod
     def test_reg_season_splits():
         reg_season_splits = player.Career(player_id).reg_season_splits()
@@ -315,14 +315,14 @@ class TestCareer():
         assert stats is not None
 
 
-class TestGameLogs():
+class TestGameLogs:
     @staticmethod
     def test_logs():
         stats = player.GameLogs(player_id).logs()
         assert stats is not None
 
 
-class TestShotTracking():
+class TestShotTracking:
     @staticmethod
     def test_overall():
         stats = player.ShotTracking(player_id).overall()
@@ -359,7 +359,7 @@ class TestShotTracking():
         assert stats is not None
 
 
-class TestReboundTracking():
+class TestReboundTracking:
     @staticmethod
     def test_overall():
         stats = player.ReboundTracking(player_id).overall()
@@ -386,7 +386,7 @@ class TestReboundTracking():
         assert stats is not None
 
 
-class TestPassTracking():
+class TestPassTracking:
     @staticmethod
     def test_made():
         stats = player.PassTracking(player_id).made()
@@ -398,14 +398,14 @@ class TestPassTracking():
         assert stats is not None
 
 
-class TestDefenseTracking():
+class TestDefenseTracking:
     @staticmethod
     def test_shot_types():
         stats = player.DefenseTracking(player_id).shot_types()
         assert stats is not None
 
 
-class TestVsPlayer():
+class TestVsPlayer:
     @staticmethod
     def test_overall():
         stats = player.VsPlayer(player_id, vs_player_id).overall()

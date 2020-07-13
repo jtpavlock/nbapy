@@ -4,19 +4,19 @@ from requests import get
 import pandas as pd
 
 
-class NbaAPI():
+class NbaAPI:
     TODAY = datetime.datetime.today()
-    BASE_URL = 'http://stats.nba.com/stats/'
+    BASE_URL = "http://stats.nba.com/stats/"
     HEADERS = {
-        'Host': 'stats.nba.com',
-        'Connection': 'keep-alive',
-        'Accept': 'application/json, text/plain, */*',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-        'AppleWebKit/537.36 (KHTML, like Gecko) '
-        'Chrome/78.0.3904.97 Safari/537.36',
-        'Referer': 'https://stats.nba.com/',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'en-US,en;q=0.9',
+        "Host": "stats.nba.com",
+        "Connection": "keep-alive",
+        "Accept": "application/json, text/plain, */*",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/78.0.3904.97 Safari/537.36",
+        "Referer": "https://stats.nba.com/",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9",
     }
 
     def __init__(self, endpoint, params):
@@ -45,18 +45,23 @@ class NbaAPI():
         # result_set can either be under 'resultSets' or 'resultSet'
         if result_set_name:
             result_set = next(
-                (res for res in self.json['resultSets']
-                 if res['name'] == result_set_name), None)
+                (
+                    res
+                    for res in self.json["resultSets"]
+                    if res["name"] == result_set_name
+                ),
+                None,
+            )
         else:
             # there should only be one resultSet to lookup
             try:
-                result_set = self.json['resultSet']
+                result_set = self.json["resultSet"]
             except KeyError:
                 # maybe it's under 'resultSets'
-                result_set = self.json['resultSets'][0]
+                result_set = self.json["resultSets"][0]
 
-        headers = result_set['headers']
-        values = result_set['rowSet']
+        headers = result_set["headers"]
+        values = result_set["rowSet"]
 
         return pd.DataFrame(values, columns=headers)
 
@@ -73,9 +78,7 @@ class NbaAPI():
             json (json): json object for selected API call
         """
         _get = get(
-            self.BASE_URL + self.endpoint,
-            params=self.params,
-            headers=self.HEADERS
+            self.BASE_URL + self.endpoint, params=self.params, headers=self.HEADERS
         )
         _get.raise_for_status()
 

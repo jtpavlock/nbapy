@@ -9,9 +9,7 @@ class PlayerNotFoundException(Exception):
 
 
 def get_id(
-        name,
-        season=constants.CURRENT_SEASON,
-        active_only=1,
+    name, season=constants.CURRENT_SEASON, active_only=1,
 ):
     """Get a player_id for any specified player.
 
@@ -32,17 +30,16 @@ def get_id(
     """
     name = name.lower()
 
-    players = pd.DataFrame(
-        PlayerList(season=season, active_only=active_only).players())
+    players = pd.DataFrame(PlayerList(season=season, active_only=active_only).players())
 
-    player = players.loc[players['DISPLAY_FIRST_LAST'].str.lower() == name,
-                         'PERSON_ID']
+    player = players.loc[players["DISPLAY_FIRST_LAST"].str.lower() == name, "PERSON_ID"]
     try:
         player_id = player.iat[0]
     except IndexError:
         raise PlayerNotFoundException(
             f'The player "{name}" could not be found. Please double check the '
-            'name against nba.com')
+            "name against nba.com"
+        )
 
     return player_id
 
@@ -60,18 +57,19 @@ class PlayerList:
             then only players who's career ended in the specified season will
             be listed.
     """
-    _endpoint = 'commonallplayers'
+
+    _endpoint = "commonallplayers"
 
     def __init__(
-            self,
-            league_id=constants.League.NBA,
-            season=constants.CURRENT_SEASON,
-            active_only=1,
+        self,
+        league_id=constants.League.NBA,
+        season=constants.CURRENT_SEASON,
+        active_only=1,
     ):
         self._params = {
-            'LeagueID': league_id,
-            'Season': season,
-            'IsOnlyCurrentSeason': active_only,
+            "LeagueID": league_id,
+            "Season": season,
+            "IsOnlyCurrentSeason": active_only,
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
@@ -86,18 +84,19 @@ class Summary:
     Args:
         player_id: ID of the player to look up
     """
-    _endpoint = 'commonplayerinfo'
+
+    _endpoint = "commonplayerinfo"
 
     def __init__(self, player_id: str):
-        self._params = {'PlayerID': player_id}
+        self._params = {"PlayerID": player_id}
 
         self.api = NbaAPI(self._endpoint, self._params)
 
     def info(self):
-        return self.api.get_result('CommonPlayerInfo')
+        return self.api.get_result("CommonPlayerInfo")
 
     def headline_stats(self):
-        return self.api.get_result('PlayerHeadlineStats')
+        return self.api.get_result("PlayerHeadlineStats")
 
 
 class Splits:
@@ -132,65 +131,66 @@ class Splits:
         shot_clock_range: Filter statistics by range in shot clock
         last_n_games: Filter by number of games specified in N
     """
-    _endpoint = 'playerdashboardbygeneralsplits'  # this could be any split
+
+    _endpoint = "playerdashboardbygeneralsplits"  # this could be any split
 
     def __init__(
-            self,
-            player_id: str,
-            team_id: str = 0,
-            measure_type=constants.MeasureType.Default,
-            per_mode=constants.PerMode.Default,
-            plus_minus=constants.PlusMinus.Default,
-            pace_adjust=constants.PaceAdjust.Default,
-            rank=constants.PaceAdjust.Default,
-            league_id=constants.League.Default,
-            season=constants.CURRENT_SEASON,
-            season_type=constants.SeasonType.Default,
-            po_round=constants.PlayoffRound.Default,
-            outcome=constants.Outcome.Default,
-            location=constants.Location.Default,
-            month=constants.Month.Default,
-            season_segment=constants.SeasonSegment.Default,
-            date_from=constants.DateFrom.Default,
-            date_to=constants.DateTo.Default,
-            opponent_team_id=constants.OpponentTeamID.Default,
-            vs_conference=constants.VsConference.Default,
-            vs_division=constants.VsDivision.Default,
-            game_segment=constants.GameSegment.Default,
-            period=constants.Period.Default,
-            shot_clock_range=constants.ShotClockRange.Default,
-            last_n_games=constants.LastNGames.Default,
+        self,
+        player_id: str,
+        team_id: str = 0,
+        measure_type=constants.MeasureType.Default,
+        per_mode=constants.PerMode.Default,
+        plus_minus=constants.PlusMinus.Default,
+        pace_adjust=constants.PaceAdjust.Default,
+        rank=constants.PaceAdjust.Default,
+        league_id=constants.League.Default,
+        season=constants.CURRENT_SEASON,
+        season_type=constants.SeasonType.Default,
+        po_round=constants.PlayoffRound.Default,
+        outcome=constants.Outcome.Default,
+        location=constants.Location.Default,
+        month=constants.Month.Default,
+        season_segment=constants.SeasonSegment.Default,
+        date_from=constants.DateFrom.Default,
+        date_to=constants.DateTo.Default,
+        opponent_team_id=constants.OpponentTeamID.Default,
+        vs_conference=constants.VsConference.Default,
+        vs_division=constants.VsDivision.Default,
+        game_segment=constants.GameSegment.Default,
+        period=constants.Period.Default,
+        shot_clock_range=constants.ShotClockRange.Default,
+        last_n_games=constants.LastNGames.Default,
     ):
         self._params = {
-            'PlayerID': player_id,
-            'TeamID': team_id,
-            'MeasureType': measure_type,
-            'PerMode': per_mode,
-            'PlusMinus': plus_minus,
-            'PaceAdjust': pace_adjust,
-            'Rank': rank,
-            'LeagueID': league_id,
-            'Season': season,
-            'SeasonType': season_type,
-            'PORound': po_round,
-            'Outcome': outcome,
-            'Location': location,
-            'Month': month,
-            'SeasonSegment': season_segment,
-            'DateFrom': date_from,
-            'DateTo': date_to,
-            'OpponentTeamID': opponent_team_id,
-            'VsConference': vs_conference,
-            'VsDivision': vs_division,
-            'GameSegment': game_segment,
-            'Period': period,
-            'ShotClockRange': shot_clock_range,
-            'LastNGames': last_n_games,
+            "PlayerID": player_id,
+            "TeamID": team_id,
+            "MeasureType": measure_type,
+            "PerMode": per_mode,
+            "PlusMinus": plus_minus,
+            "PaceAdjust": pace_adjust,
+            "Rank": rank,
+            "LeagueID": league_id,
+            "Season": season,
+            "SeasonType": season_type,
+            "PORound": po_round,
+            "Outcome": outcome,
+            "Location": location,
+            "Month": month,
+            "SeasonSegment": season_segment,
+            "DateFrom": date_from,
+            "DateTo": date_to,
+            "OpponentTeamID": opponent_team_id,
+            "VsConference": vs_conference,
+            "VsDivision": vs_division,
+            "GameSegment": game_segment,
+            "Period": period,
+            "ShotClockRange": shot_clock_range,
+            "LastNGames": last_n_games,
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
     def overall(self):
-        return self.api.get_result('OverallPlayerDashboard')
+        return self.api.get_result("OverallPlayerDashboard")
 
 
 class GeneralSplits(Splits):
@@ -200,25 +200,26 @@ class GeneralSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbygeneralsplits'
+
+    _endpoint = "playerdashboardbygeneralsplits"
 
     def location(self):
-        return self.api.get_result('LocationPlayerDashboard')
+        return self.api.get_result("LocationPlayerDashboard")
 
     def wins_losses(self):
-        return self.api.get_result('WinsLossesPlayerDashboard')
+        return self.api.get_result("WinsLossesPlayerDashboard")
 
     def month(self):
-        return self.api.get_result('MonthPlayerDashboard')
+        return self.api.get_result("MonthPlayerDashboard")
 
     def pre_post_all_star(self):
-        return self.api.get_result('PrePostAllStarPlayerDashboard')
+        return self.api.get_result("PrePostAllStarPlayerDashboard")
 
     def starting_position(self):
-        return self.api.get_result('StartingPosition')
+        return self.api.get_result("StartingPosition")
 
     def days_rest(self):
-        return self.api.get_result('DaysRestPlayerDashboard')
+        return self.api.get_result("DaysRestPlayerDashboard")
 
 
 class OpponentSplits(Splits):
@@ -228,16 +229,17 @@ class OpponentSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbyopponent'
+
+    _endpoint = "playerdashboardbyopponent"
 
     def by_conference(self):
-        return self.api.get_result('ConferencePlayerDashboard')
+        return self.api.get_result("ConferencePlayerDashboard")
 
     def by_division(self):
-        return self.api.get_result('DivisionPlayerDashboard')
+        return self.api.get_result("DivisionPlayerDashboard")
 
     def by_team(self):
-        return self.api.get_result('OpponentPlayerDashboard')
+        return self.api.get_result("OpponentPlayerDashboard")
 
 
 class LastNGamesSplits(Splits):
@@ -247,23 +249,24 @@ class LastNGamesSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbylastngames'
+
+    _endpoint = "playerdashboardbylastngames"
 
     def last_5(self):
-        return self.api.get_result('Last5PlayerDashboard')
+        return self.api.get_result("Last5PlayerDashboard")
 
     def last_10(self):
-        return self.api.get_result('Last10PlayerDashboard')
+        return self.api.get_result("Last10PlayerDashboard")
 
     def last_15(self):
-        return self.api.get_result('Last15PlayerDashboard')
+        return self.api.get_result("Last15PlayerDashboard")
 
     def last_20(self):
-        return self.api.get_result('Last20PlayerDashboard')
+        return self.api.get_result("Last20PlayerDashboard")
 
     def game_num(self):
         """Stats for sets of 10 games"""
-        return self.api.get_result('GameNumberPlayerDashboard')
+        return self.api.get_result("GameNumberPlayerDashboard")
 
 
 class InGameSplits(Splits):
@@ -273,19 +276,20 @@ class InGameSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbygamesplits'
+
+    _endpoint = "playerdashboardbygamesplits"
 
     def by_half(self):
-        return self.api.get_result('ByHalfPlayerDashboard')
+        return self.api.get_result("ByHalfPlayerDashboard")
 
     def by_period(self):
-        return self.api.get_result('ByPeriodPlayerDashboard')
+        return self.api.get_result("ByPeriodPlayerDashboard")
 
     def by_score_margin(self):
-        return self.api.get_result('ByScoreMarginPlayerDashboard')
+        return self.api.get_result("ByScoreMarginPlayerDashboard")
 
     def by_actual_margin(self):
-        return self.api.get_result('ByActualMarginPlayerDashboard')
+        return self.api.get_result("ByActualMarginPlayerDashboard")
 
 
 class ClutchSplits(Splits):
@@ -295,39 +299,40 @@ class ClutchSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbyclutch'
+
+    _endpoint = "playerdashboardbyclutch"
 
     def last_5m_lte_5pts(self):
         """Splits in last 5 minutes <= 5 points"""
-        return self.api.get_result('Last5Min5PointPlayerDashboard')
+        return self.api.get_result("Last5Min5PointPlayerDashboard")
 
     def last_3m_lte_5pts(self):
         """Splits in last 3 minutes <= 5 points"""
-        return self.api.get_result('Last3Min5PointPlayerDashboard')
+        return self.api.get_result("Last3Min5PointPlayerDashboard")
 
     def last_1m_lte_5pts(self):
         """Splits in last minute <= 5 points"""
-        return self.api.get_result('Last1Min5PointPlayerDashboard')
+        return self.api.get_result("Last1Min5PointPlayerDashboard")
 
     def last_30s_lte_3pts(self):
         """Splits in last 30 seconds <= 3 points"""
-        return self.api.get_result('Last30Sec3PointPlayerDashboard')
+        return self.api.get_result("Last30Sec3PointPlayerDashboard")
 
     def last_10s_lte_3pts(self):
         """Splits in last 10 seconds <= 3 points"""
-        return self.api.get_result('Last10Sec3PointPlayerDashboard')
+        return self.api.get_result("Last10Sec3PointPlayerDashboard")
 
     def last_5m_pm_5pts(self):
         """Splits in last 5 minutes +/- 5 points"""
-        return self.api.get_result('Last5MinPlusMinus5PointPlayerDashboard')
+        return self.api.get_result("Last5MinPlusMinus5PointPlayerDashboard")
 
     def last_3m_pm_5pts(self):
         """Splits in last 3 minutes +/- 5 points"""
-        return self.api.get_result('Last3MinPlusMinus5PointPlayerDashboard')
+        return self.api.get_result("Last3MinPlusMinus5PointPlayerDashboard")
 
     def last_1m_pm_5pts(self):
         """Splits in last minute +/- 5 points"""
-        return self.api.get_result('Last1MinPlusMinus5PointPlayerDashboard')
+        return self.api.get_result("Last1MinPlusMinus5PointPlayerDashboard")
 
 
 class TeamPerformanceSplits(Splits):
@@ -337,16 +342,17 @@ class TeamPerformanceSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbyteamperformance'
+
+    _endpoint = "playerdashboardbyteamperformance"
 
     def score_differential(self):
-        return self.api.get_result('ScoreDifferentialPlayerDashboard')
+        return self.api.get_result("ScoreDifferentialPlayerDashboard")
 
     def points_scored(self):
-        return self.api.get_result('PointsScoredPlayerDashboard')
+        return self.api.get_result("PointsScoredPlayerDashboard")
 
     def points_against(self):
-        return self.api.get_result('PontsAgainstPlayerDashboard')
+        return self.api.get_result("PontsAgainstPlayerDashboard")
 
 
 class YearOverYearSplits(Splits):
@@ -356,10 +362,11 @@ class YearOverYearSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbyyearoveryear'
+
+    _endpoint = "playerdashboardbyyearoveryear"
 
     def by_year(self):
-        return self.api.get_result('ByYearPlayerDashboard')
+        return self.api.get_result("ByYearPlayerDashboard")
 
 
 class ShootingSplits(Splits):
@@ -369,28 +376,29 @@ class ShootingSplits(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashboardbyshootingsplits'
+
+    _endpoint = "playerdashboardbyshootingsplits"
 
     def shot_5ft(self):
-        return self.api.get_result('Shot5FTPlayerDashboard')
+        return self.api.get_result("Shot5FTPlayerDashboard")
 
     def shot_8ft(self):
-        return self.api.get_result('Shot8FTPlayerDashboard')
+        return self.api.get_result("Shot8FTPlayerDashboard")
 
     def shot_areas(self):
-        return self.api.get_result('ShotAreaPlayerDashboard')
+        return self.api.get_result("ShotAreaPlayerDashboard")
 
     def assisted_shots(self):
-        return self.api.get_result('AssitedShotPlayerDashboard')
+        return self.api.get_result("AssitedShotPlayerDashboard")
 
     def shot_types_summary(self):
-        return self.api.get_result('ShotTypeSummaryPlayerDashboard')
+        return self.api.get_result("ShotTypeSummaryPlayerDashboard")
 
     def shot_types_detail(self):
-        return self.api.get_result('ShotTypePlayerDashboard')
+        return self.api.get_result("ShotTypePlayerDashboard")
 
     def assisted_by(self):
-        return self.api.get_result('AssistedBy')
+        return self.api.get_result("AssistedBy")
 
 
 class Career:
@@ -404,18 +412,19 @@ class Career:
         per_mode: Mode to measure statistics (Totals, PerGame, Per36, etc.)
         league_id: ID for the league to look in (Default is 00)
     """
-    _endpoint = 'playerprofilev2'
+
+    _endpoint = "playerprofilev2"
 
     def __init__(
-            self,
-            player_id: str,
-            per_mode=constants.PerMode.PerGame,
-            league_id=constants.League.NBA,
+        self,
+        player_id: str,
+        per_mode=constants.PerMode.PerGame,
+        league_id=constants.League.NBA,
     ):
         self._params = {
-            'PlayerID': player_id,
-            'LeagueID': league_id,
-            'PerMode': per_mode,
+            "PlayerID": player_id,
+            "LeagueID": league_id,
+            "PerMode": per_mode,
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
@@ -428,8 +437,8 @@ class Career:
                 False: Per-season (per_mode) stats
         """
         if career:
-            return self.api.get_result('CareerTotalsRegularSeason')
-        return self.api.get_result('SeasonTotalsRegularSeason')
+            return self.api.get_result("CareerTotalsRegularSeason")
+        return self.api.get_result("SeasonTotalsRegularSeason")
 
     def post_season_splits(self, career=False):
         """Post-season splits
@@ -440,8 +449,8 @@ class Career:
                 False: Per-season (per_mode) stats
         """
         if career:
-            return self.api.get_result('CareerTotalsPostSeason')
-        return self.api.get_result('SeasonTotalsPostSeason')
+            return self.api.get_result("CareerTotalsPostSeason")
+        return self.api.get_result("SeasonTotalsPostSeason")
 
     def all_star_season_splits(self, career=False):
         """Splits for all seasons the player was an all-star
@@ -452,8 +461,8 @@ class Career:
                 False: Per-season (per_mode) stats
         """
         if career:
-            return self.api.get_result('CareerTotalsAllStarSeason')
-        return self.api.get_result('SeasonTotalsAllStarSeason')
+            return self.api.get_result("CareerTotalsAllStarSeason")
+        return self.api.get_result("SeasonTotalsAllStarSeason")
 
     def college_season_splits(self, career=False):
         """College splits
@@ -464,28 +473,28 @@ class Career:
                 False: Per-season (per_mode) stats
         """
         if career:
-            return self.api.get_result('CareerTotalsCollegeSeason')
-        return self.api.get_result('SeasonTotalsCollegeSeason')
+            return self.api.get_result("CareerTotalsCollegeSeason")
+        return self.api.get_result("SeasonTotalsCollegeSeason")
 
     def reg_season_rankings(self):
         """Regular season split rankings"""
-        return self.api.get_result('SeasonRankingsRegularSeason')
+        return self.api.get_result("SeasonRankingsRegularSeason")
 
     def post_season_rankings(self):
         """Post season split rankings"""
-        return self.api.get_result('SeasonRankingsPostSeason')
+        return self.api.get_result("SeasonRankingsPostSeason")
 
     def season_highs(self):
         """Season highs in basic stats"""
-        return self.api.get_result('SeasonHighs')
+        return self.api.get_result("SeasonHighs")
 
     def career_highs(self):
         """Career highs in basic stats"""
-        return self.api.get_result('CareerHighs')
+        return self.api.get_result("CareerHighs")
 
     def next_game(self):
         """Info on the player's next game"""
-        return self.api.get_result('NextGame')
+        return self.api.get_result("NextGame")
 
 
 class GameLogs:
@@ -497,25 +506,26 @@ class GameLogs:
         season: Season given to look up
         season_type: Season type to consider (Regular / Playoffs)
     """
-    _endpoint = 'playergamelog'
+
+    _endpoint = "playergamelog"
 
     def __init__(
-            self,
-            player_id: str,
-            league_id=constants.League.NBA,
-            season=constants.CURRENT_SEASON,
-            season_type=constants.SeasonType.Regular,
+        self,
+        player_id: str,
+        league_id=constants.League.NBA,
+        season=constants.CURRENT_SEASON,
+        season_type=constants.SeasonType.Regular,
     ):
         self._params = {
-            'PlayerID': player_id,
-            'LeagueID': league_id,
-            'Season': season,
-            'SeasonType': season_type,
+            "PlayerID": player_id,
+            "LeagueID": league_id,
+            "Season": season,
+            "SeasonType": season_type,
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
     def logs(self):
-        return self.api.get_result('PlayerGameLog')
+        return self.api.get_result("PlayerGameLog")
 
 
 class ShotTracking(Splits):
@@ -524,28 +534,29 @@ class ShotTracking(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashptshots'
+
+    _endpoint = "playerdashptshots"
 
     def overall(self):
-        return self.api.get_result('Overall')
+        return self.api.get_result("Overall")
 
     def general(self):
-        return self.api.get_result('GeneralShooting')
+        return self.api.get_result("GeneralShooting")
 
     def shot_clock(self):
-        return self.api.get_result('ShotClockShooting')
+        return self.api.get_result("ShotClockShooting")
 
     def dribbles(self):
-        return self.api.get_result('DribbleShooting')
+        return self.api.get_result("DribbleShooting")
 
     def closest_defender(self):
-        return self.api.get_result('ClosestDefenderShooting')
+        return self.api.get_result("ClosestDefenderShooting")
 
     def closest_defender_long(self):
-        return self.api.get_result('ClosestDefender10ftPlusShooting')
+        return self.api.get_result("ClosestDefender10ftPlusShooting")
 
     def touch_time(self):
-        return self.api.get_result('TouchTimeShooting')
+        return self.api.get_result("TouchTimeShooting")
 
 
 class ReboundTracking(Splits):
@@ -554,22 +565,23 @@ class ReboundTracking(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashptreb'
+
+    _endpoint = "playerdashptreb"
 
     def overall(self):
-        return self.api.get_result('OverallRebounding')
+        return self.api.get_result("OverallRebounding")
 
     def shot_type(self):
-        return self.api.get_result('ShotTypeRebounding')
+        return self.api.get_result("ShotTypeRebounding")
 
     def num_contested(self):
-        return self.api.get_result('NumContestedRebounding')
+        return self.api.get_result("NumContestedRebounding")
 
     def shot_distance(self):
-        return self.api.get_result('ShotDistanceRebounding')
+        return self.api.get_result("ShotDistanceRebounding")
 
     def rebound_distance(self):
-        return self.api.get_result('RebDistanceRebounding')
+        return self.api.get_result("RebDistanceRebounding")
 
 
 class PassTracking(Splits):
@@ -578,13 +590,14 @@ class PassTracking(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashptpass'
+
+    _endpoint = "playerdashptpass"
 
     def made(self):
-        return self.api.get_result('PassesMade')
+        return self.api.get_result("PassesMade")
 
     def received(self):
-        return self.api.get_result('PassesReceived')
+        return self.api.get_result("PassesReceived")
 
 
 class DefenseTracking(Splits):
@@ -594,10 +607,11 @@ class DefenseTracking(Splits):
     Args:
         see Splits
     """
-    _endpoint = 'playerdashptshotdefend'
+
+    _endpoint = "playerdashptshotdefend"
 
     def shot_types(self):
-        return self.api.get_result('DefendingShots')
+        return self.api.get_result("DefendingShots")
 
 
 class VsPlayer:
@@ -633,99 +647,100 @@ class VsPlayer:
     Attributes:
         json: Contains the full json dump to play around with
     """
-    _endpoint = 'playervsplayer'
+
+    _endpoint = "playervsplayer"
 
     def __init__(
-            self,
-            player_id: str,
-            vs_player_id: str,
-            team_id: str = 0,
-            measure_type=constants.MeasureType.Default,
-            per_mode=constants.PerMode.Default,
-            plus_minus=constants.PlusMinus.Default,
-            pace_adjust=constants.PaceAdjust.Default,
-            rank=constants.PaceAdjust.Default,
-            league_id=constants.League.Default,
-            season=constants.CURRENT_SEASON,
-            season_type=constants.SeasonType.Default,
-            po_round=constants.PlayoffRound.Default,
-            outcome=constants.Outcome.Default,
-            location=constants.Location.Default,
-            month=constants.Month.Default,
-            season_segment=constants.SeasonSegment.Default,
-            date_from=constants.DateFrom.Default,
-            date_to=constants.DateTo.Default,
-            opponent_team_id=constants.OpponentTeamID.Default,
-            vs_conference=constants.VsConference.Default,
-            vs_division=constants.VsDivision.Default,
-            game_segment=constants.GameSegment.Default,
-            period=constants.Period.Default,
-            shot_clock_range=constants.ShotClockRange.Default,
-            last_n_games=constants.LastNGames.Default,
+        self,
+        player_id: str,
+        vs_player_id: str,
+        team_id: str = 0,
+        measure_type=constants.MeasureType.Default,
+        per_mode=constants.PerMode.Default,
+        plus_minus=constants.PlusMinus.Default,
+        pace_adjust=constants.PaceAdjust.Default,
+        rank=constants.PaceAdjust.Default,
+        league_id=constants.League.Default,
+        season=constants.CURRENT_SEASON,
+        season_type=constants.SeasonType.Default,
+        po_round=constants.PlayoffRound.Default,
+        outcome=constants.Outcome.Default,
+        location=constants.Location.Default,
+        month=constants.Month.Default,
+        season_segment=constants.SeasonSegment.Default,
+        date_from=constants.DateFrom.Default,
+        date_to=constants.DateTo.Default,
+        opponent_team_id=constants.OpponentTeamID.Default,
+        vs_conference=constants.VsConference.Default,
+        vs_division=constants.VsDivision.Default,
+        game_segment=constants.GameSegment.Default,
+        period=constants.Period.Default,
+        shot_clock_range=constants.ShotClockRange.Default,
+        last_n_games=constants.LastNGames.Default,
     ):
         self._params = {
-            'PlayerID': player_id,
-            'VsPlayerID': vs_player_id,
-            'TeamID': team_id,
-            'MeasureType': measure_type,
-            'PerMode': per_mode,
-            'PlusMinus': plus_minus,
-            'PaceAdjust': pace_adjust,
-            'Rank': rank,
-            'LeagueID': league_id,
-            'Season': season,
-            'SeasonType': season_type,
-            'PORound': po_round,
-            'Outcome': outcome,
-            'Location': location,
-            'Month': month,
-            'SeasonSegment': season_segment,
-            'DateFrom': date_from,
-            'DateTo': date_to,
-            'OpponentTeamID': opponent_team_id,
-            'VsConference': vs_conference,
-            'VsDivision': vs_division,
-            'GameSegment': game_segment,
-            'Period': period,
-            'ShotClockRange': shot_clock_range,
-            'LastNGames': last_n_games,
+            "PlayerID": player_id,
+            "VsPlayerID": vs_player_id,
+            "TeamID": team_id,
+            "MeasureType": measure_type,
+            "PerMode": per_mode,
+            "PlusMinus": plus_minus,
+            "PaceAdjust": pace_adjust,
+            "Rank": rank,
+            "LeagueID": league_id,
+            "Season": season,
+            "SeasonType": season_type,
+            "PORound": po_round,
+            "Outcome": outcome,
+            "Location": location,
+            "Month": month,
+            "SeasonSegment": season_segment,
+            "DateFrom": date_from,
+            "DateTo": date_to,
+            "OpponentTeamID": opponent_team_id,
+            "VsConference": vs_conference,
+            "VsDivision": vs_division,
+            "GameSegment": game_segment,
+            "Period": period,
+            "ShotClockRange": shot_clock_range,
+            "LastNGames": last_n_games,
         }
         self.api = NbaAPI(self._endpoint, self._params)
 
     def overall(self):
         """Splits comparison"""
-        return self.api.get_result('Overall')
+        return self.api.get_result("Overall")
 
     def on_off_court(self):
         """Player1's splits with Player2 on and off the court"""
-        return self.api.get_result('OnOffCourt')
+        return self.api.get_result("OnOffCourt")
 
     def shot_dist_overall(self):
         """Player1's shooting distance splits regardless of Player2"""
-        return self.api.get_result('ShotDistanceOverall')
+        return self.api.get_result("ShotDistanceOverall")
 
     def shot_dist_on_court(self):
         """Player1's shooting distance splits with Player2 on the court"""
-        return self.api.get_result('ShotDistanceOnCourt')
+        return self.api.get_result("ShotDistanceOnCourt")
 
     def shot_dist_off_court(self):
         """Player1's shooting distance splits with Player2 off the court"""
-        return self.api.get_result('ShotDistanceOffCourt')
+        return self.api.get_result("ShotDistanceOffCourt")
 
     def shot_area_overall(self):
         """Player1's shooting by area splits regardless of Player2"""
-        return self.api.get_result('ShotAreaOverall')
+        return self.api.get_result("ShotAreaOverall")
 
     def shot_area_on_court(self):
         """Player1's shooting by area splits with Player2 on the court"""
-        return self.api.get_result('ShotAreaOnCourt')
+        return self.api.get_result("ShotAreaOnCourt")
 
     def shot_area_off_court(self):
         """Player1's shooting by area splits with Player2 off the court"""
-        return self.api.get_result('ShotAreaOffCourt')
+        return self.api.get_result("ShotAreaOffCourt")
 
     def player_info(self):
-        return self.api.get_result('PlayerInfo')
+        return self.api.get_result("PlayerInfo")
 
     def vs_player_info(self):
-        return self.api.get_result('VsPlayerInfo')
+        return self.api.get_result("VsPlayerInfo")
