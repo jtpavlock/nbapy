@@ -14,6 +14,7 @@ setup(
     install_requires=["requests", "pandas",],
     extras_require={
         "dev": [
+            "pre-commit",
             "pytest",
             "pytest-cov",
             "requests_cache",  # to speed up testing

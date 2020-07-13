@@ -25,7 +25,7 @@ $ pip install .
 - [requests](http://www.python-requests.org/en/latest/)
 - [pandas](https://pandas.pydata.org/)
 
-## Development
+## Contributing
 #### 1. Fork the repository and create a feature/bug fix branch
 
 #### 2. Install development requirements
@@ -38,6 +38,9 @@ $ pip install .
 `$ pytest --cov`
 
 `$ flake8`
+
+It's important to note, `nbapy` uses [black](https://github.com/psf/black) for formatting.
+There is a pre-commit hook in this repo that will run `black` before each commit, so don't be surprised if your code changes!
 
 #### 6. Submit a pull request
 
