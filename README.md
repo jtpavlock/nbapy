@@ -31,6 +31,10 @@ $ pip install .
 #### 2. Install development requirements
 `$ pip install -e . ".[dev]"`
 
+`$ pre-commit install`*
+
+*`nbapy` uses [black](https://github.com/psf/black) for formatting. This command will install a pre-commit hook to automatically run `black` before each commit.
+
 #### 3. Hack away
 #### 4. Create some tests
 
