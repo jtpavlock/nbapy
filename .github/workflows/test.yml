@@ -1,27 +1,35 @@
 name: Lint & Test
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Setup Python 3.6
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: 3.6
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install . ".[dev]"
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings.
-        flake8 . --count --exit-zero --statistics
     - name: Test with pytest
       run: |
         # endpoints should be tested locally otherwise this would take too long
         pytest --ignore=tests/endpoints/
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install . ".[dev]"
+    - name: Setup Python 3.6
+      uses: actions/setup-python@v2
+    - name: Lint with black
+    - uses: psf/black@stable
+    - name: Lint with flake8
+      run: flake8
