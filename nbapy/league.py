@@ -1,11 +1,11 @@
-"""League-wide stats"""
+"""League-wide stats."""
 
 from nbapy.nba_api import NbaAPI
 from nbapy import constants
 
 
 class Lineups:
-    """Stats for various lineups throughout the league"""
+    """Stats for various lineups throughout the league."""
 
     _endpoint = "leaguedashlineups"
 
@@ -135,7 +135,7 @@ class TeamStats:
 
 
 class PlayerStats:
-    """League-wide (all) player stats"""
+    """League-wide (all) player stats."""
 
     _endpoint = "leaguedashplayerstats"
 
@@ -219,8 +219,9 @@ class PlayerStats:
 
 
 class PlayerTrackingStats:
-    """Various player tracking stats such as catch and shoot tracking,
-       speed and distance, post-ups, touches, etc.
+    """Various player tracking stats.
+
+    Includes catch and shoot tracking, speed and distance, post-ups, touches, etc.
     """
 
     _endpoint = "leaguedashptstats"
@@ -298,7 +299,7 @@ class PlayerTrackingStats:
 
 
 class LeagueLeaders:
-    """Season league leaders in various stats"""
+    """Season league leaders in various stats."""
 
     _endpoint = "leagueleaders"
 

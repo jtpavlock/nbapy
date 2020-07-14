@@ -50,7 +50,7 @@ class Details:
         self.api = NbaAPI(self._endpoint, self._params)
 
     def background(self):
-        """Background info such as coach, city, arena, owner, etc. """
+        """Background info such as coach, city, arena, owner, etc."""
         return self.api.get_result("TeamBackground")
 
     def history(self):
@@ -62,15 +62,15 @@ class Details:
         return self.api.get_result("TeamSocialSites")
 
     def awards_championships(self):
-        """Champtionship title victories and opponents"""
+        """Champtionship title victories and opponents."""
         return self.api.get_result("TeamAwardsChampionships")
 
     def awards_conf(self):
-        """Conference title victories and opponents"""
+        """Conference title victories and opponents."""
         return self.api.get_result("TeamAwardsConf")
 
     def awards_div(self):
-        """Division title victories and opponents"""
+        """Division title victories and opponents."""
         return self.api.get_result("TeamAwardsDiv")
 
     def hof_players(self):
@@ -78,7 +78,7 @@ class Details:
         return self.api.get_result("TeamHof")
 
     def retired_players(self):
-        """Retired numbers and associated info"""
+        """Retired numbers and associated info."""
         return self.api.get_result("TeamRetired")
 
 
@@ -191,11 +191,10 @@ class Splits:
 
 
 class GeneralSplits(Splits):
-    """Contains stats pertaining to location, wins and losses, pre/post all star
-    break and numbers of days rest
+    """Random general stats.
 
-    Args:
-        see Splits
+    Contains stats pertaining to location, wins and losses, pre/post all star break and
+    numbers of days rest.
     """
 
     _endpoint = "teamdashboardbygeneralsplits"
@@ -217,7 +216,7 @@ class GeneralSplits(Splits):
 
 
 class LineupSplits:
-    """Splits for all team lineup combinations"""
+    """Splits for all team lineup combinations."""
 
     _endpoint = "teamdashlineups"
 
@@ -277,11 +276,9 @@ class LineupSplits:
 
 
 class OpponentSplits(Splits):
-    """Contains stats pertaining to a team vs certain opponents by
-    division, conference, and by specific team opponent
+    """Contains stats pertaining to a team vs certain opponents.
 
-    Args:
-        see Splits
+    By division, conference, and by specific team opponent
     """
 
     _endpoint = "teamdashboardbyopponent"
@@ -297,11 +294,9 @@ class OpponentSplits(Splits):
 
 
 class LastNGamesSplits(Splits):
-    """Contains team stats per last 5, 10, 15, and 20 games, or
-    specified number of games.
+    """Contains team stats per n games.
 
-    Args:
-        see Splits
+    Per last 5, 10, 15, and 20 games, or specified number of games.
     """
 
     _endpoint = "teamdashboardbylastngames"
@@ -319,17 +314,12 @@ class LastNGamesSplits(Splits):
         return self.api.get_result("Last20TeamDashboard")
 
     def game_num(self):
-        """Stats for sets of 10 games"""
+        """Stats for sets of 10 games."""
         return self.api.get_result("GameNumberTeamDashboard")
 
 
 class InGameSplits(Splits):
-    """Contains team stats by half, by quarter, by score margin,
-    and by actual margins.
-
-    Args:
-        see Splits
-    """
+    """Team stats by half, by quarter, by score margin, and by actual margins."""
 
     _endpoint = "teamdashboardbygamesplits"
 
@@ -347,54 +337,48 @@ class InGameSplits(Splits):
 
 
 class ClutchSplits(Splits):
-    """Contains a lot of methods for last n minutes with a deficit of
-    x points.
-
-    Args:
-        see Splits
-    """
+    """Contains a lot of methods for last n minutes with a deficit of x points."""
 
     _endpoint = "teamdashboardbyclutch"
 
     def last_5m_lte_5pts(self):
-        """Splits in last 5 minutes <= 5 points"""
+        """Splits in last 5 minutes <= 5 points."""
         return self.api.get_result("Last5Min5PointTeamDashboard")
 
     def last_3m_lte_5pts(self):
-        """Splits in last 3 minutes <= 5 points"""
+        """Splits in last 3 minutes <= 5 points."""
         return self.api.get_result("Last3Min5PointTeamDashboard")
 
     def last_1m_lte_5pts(self):
-        """Splits in last minute <= 5 points"""
+        """Splits in last minute <= 5 points."""
         return self.api.get_result("Last1Min5PointTeamDashboard")
 
     def last_30s_lte_3pts(self):
-        """Splits in last 30 seconds <= 3 points"""
+        """Splits in last 30 seconds <= 3 points."""
         return self.api.get_result("Last30Sec3PointTeamDashboard")
 
     def last_10s_lte_3pts(self):
-        """Splits in last 10 seconds <= 3 points"""
+        """Splits in last 10 seconds <= 3 points."""
         return self.api.get_result("Last10Sec3PointTeamDashboard")
 
     def last_5m_pm_5pts(self):
-        """Splits in last 5 minutes +/- 5 points"""
+        """Splits in last 5 minutes +/- 5 points."""
         return self.api.get_result("Last5MinPlusMinus5PointTeamDashboard")
 
     def last_3m_pm_5pts(self):
-        """Splits in last 3 minutes +/- 5 points"""
+        """Splits in last 3 minutes +/- 5 points."""
         return self.api.get_result("Last3MinPlusMinus5PointTeamDashboard")
 
     def last_1m_pm_5pts(self):
-        """Splits in last minute +/- 5 points"""
+        """Splits in last minute +/- 5 points."""
         return self.api.get_result("Last1MinPlusMinus5PointTeamDashboard")
 
 
 class ShootingSplits(Splits):
-    """Stats based on shot distance, area, assisted to, shot types, and
-    assisted by.
+    """Shooting stats.
 
-    Args:
-        see Splits
+    Based on shot distance, area, assisted to, shot types, and
+    assisted by.
     """
 
     _endpoint = "teamdashboardbyshootingsplits"
@@ -419,11 +403,9 @@ class ShootingSplits(Splits):
 
 
 class PerformanceSplits(Splits):
-    """Team stats by different performance metrics such as score
-    differential, points scored, and points scored against.
+    """Team stats by different performance metrics.
 
-    Args:
-        see Splits
+    Includes score differential, points scored, and points scored against.
     """
 
     _endpoint = "teamdashboardbyteamperformance"
@@ -460,9 +442,7 @@ class PlayerOnOffSplits(Splits):
 
 
 class PlayerOnOffSummary(Splits):
-    """Team stats on offensive/defensive/net rating with players
-       on or off the court.
-    """
+    """Team stats on offensive/defensive/net rating with players on or off the court."""
 
     _endpoint = "teamplayeronoffsummary"
 
@@ -474,12 +454,7 @@ class PlayerOnOffSummary(Splits):
 
 
 class YearOverYearSplits(Splits):
-    """Displays team stats over the given season and over all seasons in
-    the given league.
-
-    Args:
-        see Splits
-    """
+    """Team stats over the given season and over all seasons in the given league."""
 
     _endpoint = "teamdashboardbyyearoveryear"
 
@@ -488,11 +463,7 @@ class YearOverYearSplits(Splits):
 
 
 class ShotTracking(Splits):
-    """Shooting tracking data for a given team
-
-    Args:
-        see Splits
-    """
+    """Shooting tracking data for a given team."""
 
     _endpoint = "teamdashptshots"
 
@@ -516,7 +487,7 @@ class ShotTracking(Splits):
 
 
 class ReboundTracking(Splits):
-    """Tracking data for rebounding for a given team
+    """Tracking data for rebounding for a given team.
 
     Args:
         see Splits
@@ -541,11 +512,7 @@ class ReboundTracking(Splits):
 
 
 class PassTracking(Splits):
-    """Tracking data for passing for a given team
-
-    Args:
-        see Splits
-    """
+    """Tracking data for passing for a given team."""
 
     _endpoint = "teamdashptpass"
 
@@ -617,8 +584,9 @@ class GameLogs:
 
 
 class SeasonResults:
-    """Team results per season such as W/L, points, division/conference
-       rank, playoff record, finals results, etc.
+    """Team results per season.
+
+    Includes W/L, points, division/conference rank, playoff record, finals results, etc.
     """
 
     _endpoint = "teamyearbyyearstats"

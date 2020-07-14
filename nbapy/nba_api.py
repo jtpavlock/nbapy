@@ -1,3 +1,5 @@
+"""API wrapper for stats.nba.com."""
+
 import datetime
 
 from requests import get
@@ -5,6 +7,8 @@ import pandas as pd
 
 
 class NbaAPI:
+    """Represents an API call for stats.nba.com."""
+
     TODAY = datetime.datetime.today()
     BASE_URL = "http://stats.nba.com/stats/"
     HEADERS = {
@@ -19,18 +23,20 @@ class NbaAPI:
         "Accept-Language": "en-US,en;q=0.9",
     }
 
-    def __init__(self, endpoint, params):
-        """
+    def __init__(self, endpoint: str, params):
+        """Make an api call to a specific endpoint with parameters.
+
         Args:
-            endpoint: endpoint for our api call
+            endpoint: url endpoint for our api call
+                stats.nba.com/stats/{endpoint}
+            params: api parameters to pass
         """
         self.endpoint = endpoint
         self.params = params
         self.json = self._get_json()
 
-    def get_result(self, result_set_name: str = None):
-        """Return a specific set of results from our request for those that
-        support it.
+    def get_result(self, result_set_name: str = None) -> pd.DataFrame:
+        """Return a specific set of results from our request for those that support it.
 
         Args:
             result_set_name: The name of the json 'resultSet' to return.
@@ -60,16 +66,16 @@ class NbaAPI:
                 # maybe it's under 'resultSets'
                 result_set = self.json["resultSets"][0]
 
+        if not result_set:
+            raise KeyError
+
         headers = result_set["headers"]
         values = result_set["rowSet"]
 
         return pd.DataFrame(values, columns=headers)
 
     def _get_json(self):
-        """Internal method to streamline our requests / json getting
-
-        Args:
-            params (dict): parameters to be passed to the API
+        """Internal method to streamline our requests / json getting.
 
         Raises:
             HTTPError: if requests hits a status code != 200

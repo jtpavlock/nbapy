@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from nbapy.nba_api import NbaAPI
 from nbapy import constants
@@ -59,6 +59,12 @@ class Info:
 
 
 class _BoxScore(ABC):
+    @property
+    @classmethod
+    @abstractmethod
+    def _endpoint(cls):
+        return NotImplementedError
+
     def __init__(
         self,
         game_id: str,

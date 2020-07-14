@@ -1,5 +1,4 @@
-"""
-Test league module and included endpoints.
+"""Test league module and included endpoints.
 
 We won't mock any api calls just to make sure they haven't changed on us.
 """

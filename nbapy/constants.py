@@ -776,17 +776,19 @@ class Country(_DefaultBlank):
 
 
 class Height(_DefaultBlank):
-    """
+    """Player height.
+
     Example:
-    for greater than 6ft8 api call should be GT+6-8
-    for lower than 7ft3 api call should be LT+7-3
+       For greater than 6ft8 api call should be GT+6-8
+       For lower than 7ft3 api call should be LT+7-3
     """
 
 
 class Weight(_DefaultBlank):
-    """
+    """Player weight.
+
     Example:
-    for greater than 225lbs api call should be GT+225lbs
+        For greater than 225lbs api call should be GT+225lbs
     """
 
 

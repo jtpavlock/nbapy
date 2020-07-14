@@ -78,8 +78,7 @@ class PlayerList:
 
 
 class Summary:
-    """
-    Contains common player information like headline stats, weight, etc.
+    """Contains common player information like headline stats, weight, etc.
 
     Args:
         player_id: ID of the player to look up
@@ -137,7 +136,7 @@ class Splits:
     def __init__(
         self,
         player_id: str,
-        team_id: str = 0,
+        team_id: str = "0",
         measure_type=constants.MeasureType.Default,
         per_mode=constants.PerMode.Default,
         plus_minus=constants.PlusMinus.Default,
@@ -194,8 +193,10 @@ class Splits:
 
 
 class GeneralSplits(Splits):
-    """Contains stats pertaining to location, wins and losses, pre/post all star
-    break, starting position, and numbers of days rest
+    """Random general splits.
+
+    Contains stats pertaining to location, wins and losses,
+    pre/post all star break, starting position, and numbers of days rest.
 
     Args:
         see Splits
@@ -223,8 +224,9 @@ class GeneralSplits(Splits):
 
 
 class OpponentSplits(Splits):
-    """Contains stats pertaining to player stats vs certain opponents by
-    division, conference, and by specific team opponent
+    """Contains stats pertaining to player stats vs certain opponents.
+
+    Grouped by division, conference, and by specific team opponent.
 
     Args:
         see Splits
@@ -243,11 +245,9 @@ class OpponentSplits(Splits):
 
 
 class LastNGamesSplits(Splits):
-    """Contains players stats per last 5, 10, 15, and 20 games, or
-    specified number of games.
+    """Contains players stats for n games.
 
-    Args:
-        see Splits
+    Per last 5, 10, 15, and 20 games, or specified number of games.
     """
 
     _endpoint = "playerdashboardbylastngames"
@@ -265,17 +265,12 @@ class LastNGamesSplits(Splits):
         return self.api.get_result("Last20PlayerDashboard")
 
     def game_num(self):
-        """Stats for sets of 10 games"""
+        """Stats for sets of 10 games."""
         return self.api.get_result("GameNumberPlayerDashboard")
 
 
 class InGameSplits(Splits):
-    """Contains player stats by half, by quarter, by score margin,
-    and by actual margins.
-
-    Args:
-        see Splits
-    """
+    """Game splits by half, by quarter, by score margin, and by actual margins."""
 
     _endpoint = "playerdashboardbygamesplits"
 
@@ -293,54 +288,47 @@ class InGameSplits(Splits):
 
 
 class ClutchSplits(Splits):
-    """Contains a lot of methods for last n minutes with a deficit of
-    x points.
-
-    Args:
-        see Splits
-    """
+    """Contains a lot of methods for last n minutes with a deficit of x points."""
 
     _endpoint = "playerdashboardbyclutch"
 
     def last_5m_lte_5pts(self):
-        """Splits in last 5 minutes <= 5 points"""
+        """Splits in last 5 minutes <= 5 points."""
         return self.api.get_result("Last5Min5PointPlayerDashboard")
 
     def last_3m_lte_5pts(self):
-        """Splits in last 3 minutes <= 5 points"""
+        """Splits in last 3 minutes <= 5 points."""
         return self.api.get_result("Last3Min5PointPlayerDashboard")
 
     def last_1m_lte_5pts(self):
-        """Splits in last minute <= 5 points"""
+        """Splits in last minute <= 5 points."""
         return self.api.get_result("Last1Min5PointPlayerDashboard")
 
     def last_30s_lte_3pts(self):
-        """Splits in last 30 seconds <= 3 points"""
+        """Splits in last 30 seconds <= 3 points."""
         return self.api.get_result("Last30Sec3PointPlayerDashboard")
 
     def last_10s_lte_3pts(self):
-        """Splits in last 10 seconds <= 3 points"""
+        """Splits in last 10 seconds <= 3 points."""
         return self.api.get_result("Last10Sec3PointPlayerDashboard")
 
     def last_5m_pm_5pts(self):
-        """Splits in last 5 minutes +/- 5 points"""
+        """Splits in last 5 minutes +/- 5 points."""
         return self.api.get_result("Last5MinPlusMinus5PointPlayerDashboard")
 
     def last_3m_pm_5pts(self):
-        """Splits in last 3 minutes +/- 5 points"""
+        """Splits in last 3 minutes +/- 5 points."""
         return self.api.get_result("Last3MinPlusMinus5PointPlayerDashboard")
 
     def last_1m_pm_5pts(self):
-        """Splits in last minute +/- 5 points"""
+        """Splits in last minute +/- 5 points."""
         return self.api.get_result("Last1MinPlusMinus5PointPlayerDashboard")
 
 
 class TeamPerformanceSplits(Splits):
-    """Player stats by different team performance metrics such as score
-    differential, points scored, and points scored against.
+    """Player stats by different team performance metrics.
 
-    Args:
-        see Splits
+    Metrics include score differential, points scored, and points scored against.
     """
 
     _endpoint = "playerdashboardbyteamperformance"
@@ -356,12 +344,7 @@ class TeamPerformanceSplits(Splits):
 
 
 class YearOverYearSplits(Splits):
-    """Displays player stats over the given season and over all seasons in
-    the given league.
-
-    Args:
-        see Splits
-    """
+    """Stats over the given season and over all seasons in the given league."""
 
     _endpoint = "playerdashboardbyyearoveryear"
 
@@ -370,11 +353,9 @@ class YearOverYearSplits(Splits):
 
 
 class ShootingSplits(Splits):
-    """Stats based on shot distance, area, assisted to, shot types, and
-    assisted by.
+    """Shooting stats.
 
-    Args:
-        see Splits
+    Based on shot distance, area, assisted to, shot types, and assisted by.
     """
 
     _endpoint = "playerdashboardbyshootingsplits"
@@ -402,8 +383,9 @@ class ShootingSplits(Splits):
 
 
 class Career:
-    """
-    Contains stats based on several parameters such as career regular season
+    """Career stats.
+
+    Based on several parameters such as career regular season
     totals, post season career totals, all star season careers totals, college
     season career totals, season/career highs and next game info.
 
@@ -429,10 +411,10 @@ class Career:
         self.api = NbaAPI(self._endpoint, self._params)
 
     def reg_season_splits(self, career=False):
-        """Regular-season splits
+        """Regular-season splits.
 
         Args:
-            career:
+            career: switch for career stats
                 True: Career totals
                 False: Per-season (per_mode) stats
         """
@@ -441,10 +423,10 @@ class Career:
         return self.api.get_result("SeasonTotalsRegularSeason")
 
     def post_season_splits(self, career=False):
-        """Post-season splits
+        """Post-season splits.
 
         Args:
-            career:
+            career: switch for career stats
                 True: Career totals
                 False: Per-season (per_mode) stats
         """
@@ -453,10 +435,10 @@ class Career:
         return self.api.get_result("SeasonTotalsPostSeason")
 
     def all_star_season_splits(self, career=False):
-        """Splits for all seasons the player was an all-star
+        """Splits for all seasons the player was an all-star.
 
         Args:
-            career:
+            career: switch for career stats
                 True: Career totals
                 False: Per-season (per_mode) stats
         """
@@ -465,10 +447,10 @@ class Career:
         return self.api.get_result("SeasonTotalsAllStarSeason")
 
     def college_season_splits(self, career=False):
-        """College splits
+        """College splits.
 
         Args:
-            career:
+            career: switch for career stats
                 True: Career totals
                 False: Per-season (per_mode) stats
         """
@@ -477,28 +459,28 @@ class Career:
         return self.api.get_result("SeasonTotalsCollegeSeason")
 
     def reg_season_rankings(self):
-        """Regular season split rankings"""
+        """Regular season split rankings."""
         return self.api.get_result("SeasonRankingsRegularSeason")
 
     def post_season_rankings(self):
-        """Post season split rankings"""
+        """Post season split rankings."""
         return self.api.get_result("SeasonRankingsPostSeason")
 
     def season_highs(self):
-        """Season highs in basic stats"""
+        """Season highs in basic stats."""
         return self.api.get_result("SeasonHighs")
 
     def career_highs(self):
-        """Career highs in basic stats"""
+        """Career highs in basic stats."""
         return self.api.get_result("CareerHighs")
 
     def next_game(self):
-        """Info on the player's next game"""
+        """Info on the player's next game."""
         return self.api.get_result("NextGame")
 
 
 class GameLogs:
-    """Contains a full log of all the games for a player for a given season
+    """Contains a full log of all the games for a player for a given season.
 
     Args:
         player_id: ID of the player to look up
@@ -529,7 +511,7 @@ class GameLogs:
 
 
 class ShotTracking(Splits):
-    """Tracking data for shooting for a given player
+    """Tracking data for shooting for a given player.
 
     Args:
         see Splits
@@ -560,7 +542,7 @@ class ShotTracking(Splits):
 
 
 class ReboundTracking(Splits):
-    """Tracking data for rebounding for a given team
+    """Tracking data for rebounding for a given team.
 
     Args:
         see Splits
@@ -585,7 +567,7 @@ class ReboundTracking(Splits):
 
 
 class PassTracking(Splits):
-    """Tracking data for passing for a given team
+    """Tracking data for passing for a given team.
 
     Args:
         see Splits
@@ -601,8 +583,7 @@ class PassTracking(Splits):
 
 
 class DefenseTracking(Splits):
-    """
-    Tracking data for defense for a given player
+    """Tracking data for defense for a given player.
 
     Args:
         see Splits
@@ -615,7 +596,7 @@ class DefenseTracking(Splits):
 
 
 class VsPlayer:
-    """Contains general stats that pertain to players against other players
+    """Contains general stats that pertain to players against other players.
 
     Args:
         :player_id: ID of the player to look up
@@ -654,7 +635,7 @@ class VsPlayer:
         self,
         player_id: str,
         vs_player_id: str,
-        team_id: str = 0,
+        team_id: str = "0",
         measure_type=constants.MeasureType.Default,
         per_mode=constants.PerMode.Default,
         plus_minus=constants.PlusMinus.Default,
@@ -708,35 +689,35 @@ class VsPlayer:
         self.api = NbaAPI(self._endpoint, self._params)
 
     def overall(self):
-        """Splits comparison"""
+        """Splits comparison."""
         return self.api.get_result("Overall")
 
     def on_off_court(self):
-        """Player1's splits with Player2 on and off the court"""
+        """Player1's splits with Player2 on and off the court."""
         return self.api.get_result("OnOffCourt")
 
     def shot_dist_overall(self):
-        """Player1's shooting distance splits regardless of Player2"""
+        """Player1's shooting distance splits regardless of Player2."""
         return self.api.get_result("ShotDistanceOverall")
 
     def shot_dist_on_court(self):
-        """Player1's shooting distance splits with Player2 on the court"""
+        """Player1's shooting distance splits with Player2 on the court."""
         return self.api.get_result("ShotDistanceOnCourt")
 
     def shot_dist_off_court(self):
-        """Player1's shooting distance splits with Player2 off the court"""
+        """Player1's shooting distance splits with Player2 off the court."""
         return self.api.get_result("ShotDistanceOffCourt")
 
     def shot_area_overall(self):
-        """Player1's shooting by area splits regardless of Player2"""
+        """Player1's shooting by area splits regardless of Player2."""
         return self.api.get_result("ShotAreaOverall")
 
     def shot_area_on_court(self):
-        """Player1's shooting by area splits with Player2 on the court"""
+        """Player1's shooting by area splits with Player2 on the court."""
         return self.api.get_result("ShotAreaOnCourt")
 
     def shot_area_off_court(self):
-        """Player1's shooting by area splits with Player2 off the court"""
+        """Player1's shooting by area splits with Player2 off the court."""
         return self.api.get_result("ShotAreaOffCourt")
 
     def player_info(self):

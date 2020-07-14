@@ -1,4 +1,4 @@
-"""Displays game info for all games in a given day"""
+"""Displays game info for all games in a given day."""
 
 from datetime import datetime
 
