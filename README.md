@@ -53,9 +53,11 @@ You can also use `$ pre-commit run -a` to run the checks manually.
 #### 4. Create some tests
 
 #### 5. Make sure everything looks good
-`$ pytest --cov`
+`$ pytest --cov`* 
 
 `$ pre-commit run -a` (if you didn't install the pre-commit git hook)
+
+\* note the first time you run this, it may take a few minutes. However, the requests will cache, and subsequent runs should be much faster. In a perfect world, we'd have proper mocks and json representations of the data. PRs are always welcome :)
 
 #### 6. Submit a pull request
 
