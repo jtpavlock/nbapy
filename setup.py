@@ -8,7 +8,7 @@ setup(
     version="1.1.2",
     description="Python client for NBA statistics located at nba.com",
     long_description=LONG_DESCRIPTION,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/markdown" ,
     url="https://github.com/jtpavlock/nbapy",
     packages=["nbapy"],
     install_requires=["requests", "pandas"],
