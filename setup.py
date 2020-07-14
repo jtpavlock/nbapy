@@ -10,8 +10,8 @@ setup(
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url="https://github.com/jtpavlock/nbapy",
-    packages=["nbapy",],
-    install_requires=["requests", "pandas",],
+    packages=["nbapy"],
+    install_requires=["requests", "pandas"],
     extras_require={
         "dev": [
             "pre-commit",
