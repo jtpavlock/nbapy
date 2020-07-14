@@ -14,11 +14,14 @@ setup(
     install_requires=["requests", "pandas"],
     extras_require={
         "dev": [
+            "flake8",
+            "flake8-bugbear",
+            "flake8-docstrings",
+            "mypy",
             "pre-commit",
             "pytest",
             "pytest-cov",
             "requests_cache",  # to speed up testing
-            "flake8",
         ]
     },
     python_requires=">=3.6",
