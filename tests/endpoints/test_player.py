@@ -13,7 +13,7 @@ vs_player_id = "2544"  # LeBron James
 class TestGetId:
     @staticmethod
     def test_valid_player():
-        player.get_id("Jayson tatum") == player_id
+        player.get_id("Jayson tatum", active_only=0) == player_id
 
     @staticmethod
     def test_invalid_player():
