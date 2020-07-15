@@ -395,13 +395,6 @@ class TestPassTracking:
         assert stats is not None
 
 
-class TestDefenseTracking:
-    @staticmethod
-    def test_shot_types():
-        stats = player.DefenseTracking(player_id).shot_types()
-        assert stats is not None
-
-
 class TestVsPlayer:
     @staticmethod
     def test_overall():

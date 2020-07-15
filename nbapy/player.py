@@ -582,19 +582,6 @@ class PassTracking(Splits):
         return self.api.get_result("PassesReceived")
 
 
-class DefenseTracking(Splits):
-    """Tracking data for defense for a given player.
-
-    Args:
-        see Splits
-    """
-
-    _endpoint = "playerdashptshotdefend"
-
-    def shot_types(self):
-        return self.api.get_result("DefendingShots")
-
-
 class VsPlayer:
     """Contains general stats that pertain to players against other players.
 
