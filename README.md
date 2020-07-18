@@ -23,10 +23,6 @@ Else:
 $ pip install .
 ```
 
-## Requirements
-- [requests](http://www.python-requests.org/en/latest/)
-- [pandas](https://pandas.pydata.org/)
-
 ## Contributing
 #### 1. Fork the repository and create a feature/bug fix branch
 
