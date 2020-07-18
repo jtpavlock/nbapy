@@ -1,5 +1,11 @@
 # *nbapy - [stats.nba.com](https://stats.nba.com) API for python*
 
+<p align="center">
+<a href="https://github.com/jtpavlock/nbapy/actions"><img alt="Actions Status" src="https://github.com/jtpavlock/nbapy/workflows/CI/badge.svg"></a>
+<a href="https://pypi.org/project/nbapy/"><img alt="PyPI" src="https://img.shields.io/pypi/v/nbapy"></a>
+<a href="https://pepy.tech/project/nbapy"><img alt="Downloads" src="https://pepy.tech/badge/nbapy"></a>
+</p>
+
 ## Summary
 A python facing API for `stats.nba.com`
 
