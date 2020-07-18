@@ -5,7 +5,7 @@ A python facing API for `stats.nba.com`
 
 ***Warning*** `stats.nba.com` is notorious for being extremely unreliable. Please report any issues you find.
 
-## Documentation
+## Documentation / Usage
 An ongoing process, but check out the [wiki](https://github.com/jtpavlock/nbapy/wiki), the [jupyter notebook docs](https://github.com/jtpavlock/nbapy/tree/master/docs/), or feel free to poke around the codebase.
 
 ## Installation
