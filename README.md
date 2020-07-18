@@ -42,7 +42,7 @@ $ pip install .
 * [flake8](https://flake8.pycqa.org/en/latest/index.html#quickstart) for linting
 * [mypy](http://mypy-lang.org/) for static typing analysis
 
-*Optional*
+*Optional (but recommended)*
 
 `nbapy` has a [pre-commit](https://pre-commit.com/) file that you can install to automatically enforce these conventions prior to committing via a git hook.
 
