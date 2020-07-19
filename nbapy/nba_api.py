@@ -1,5 +1,6 @@
 """API wrapper for stats.nba.com."""
 
+import time
 
 import pandas as pd
 import requests
@@ -34,6 +35,7 @@ class NbaAPI:
         """
         self.endpoint = endpoint
         self.params = params
+        self.last_call = 0
         self.json = self._get_json()
 
     def get_result(self, result_set_name: str = None) -> pd.DataFrame:
@@ -80,10 +82,18 @@ class NbaAPI:
 
         Raises:
             requests.exceptions.HTTPError: if requests hits a status code != 200
+            requests.exceptions.Timeout: if requests.get takes longer than `timeout`
 
         Returns:
             json (json): json object for selected API call
         """
+        current = time.time()
+        time_passed = current - self.last_call
+        rate_limit = 2  # 1 call per x seconds
+
+        while time_passed < rate_limit:
+            time.sleep(1)
+
         response = requests.get(
             self.BASE_URL + self.endpoint,
             params=self.params,
@@ -91,5 +101,8 @@ class NbaAPI:
             timeout=5,
         )
         response.raise_for_status()
+
+        if not response.from_cache:
+            self.last_call = time.time()
 
         return response.json()
