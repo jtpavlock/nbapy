@@ -1,6 +1,5 @@
 """API wrapper for stats.nba.com."""
 
-import datetime
 
 from requests import get
 import pandas as pd
@@ -9,7 +8,6 @@ import pandas as pd
 class NbaAPI:
     """Represents an API call for stats.nba.com."""
 
-    TODAY = datetime.datetime.today()
     BASE_URL = "https://stats.nba.com/stats/"
     HEADERS = {
         "Host": "stats.nba.com",
