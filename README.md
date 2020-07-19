@@ -1,3 +1,9 @@
+<p align="center">
+<a href="https://github.com/jtpavlock/nbapy/actions"><img alt="Actions Status" src="https://github.com/jtpavlock/nbapy/workflows/CI/badge.svg"></a>
+<a href="https://pypi.org/project/nbapy/"><img alt="PyPI" src="https://img.shields.io/pypi/v/nbapy"></a>
+<a href="https://pepy.tech/project/nbapy"><img alt="Downloads" src="https://pepy.tech/badge/nbapy"></a>
+</p>
+
 # *nbapy - [stats.nba.com](https://stats.nba.com) API for python*
 
 ## Summary
@@ -5,7 +11,7 @@ A python facing API for `stats.nba.com`
 
 ***Warning*** `stats.nba.com` is notorious for being extremely unreliable. Please report any issues you find.
 
-## Documentation
+## Documentation / Usage
 An ongoing process, but check out the [wiki](https://github.com/jtpavlock/nbapy/wiki), the [jupyter notebook docs](https://github.com/jtpavlock/nbapy/tree/master/docs/), or feel free to poke around the codebase.
 
 ## Installation
@@ -23,10 +29,6 @@ Else:
 $ pip install .
 ```
 
-## Requirements
-- [requests](http://www.python-requests.org/en/latest/)
-- [pandas](https://pandas.pydata.org/)
-
 ## Contributing
 #### 1. Fork the repository and create a feature/bug fix branch
 
@@ -42,7 +44,7 @@ $ pip install .
 * [flake8](https://flake8.pycqa.org/en/latest/index.html#quickstart) for linting
 * [mypy](http://mypy-lang.org/) for static typing analysis
 
-*Optional*
+*Optional (but recommended)*
 
 `nbapy` has a [pre-commit](https://pre-commit.com/) file that you can install to automatically enforce these conventions prior to committing via a git hook.
 
@@ -57,7 +59,7 @@ You can also use `$ pre-commit run -a` to run the checks manually.
 
 `$ pre-commit run -a` (if you didn't install the pre-commit git hook)
 
-\* note the first time you run this, it may take a few minutes. However, the requests will cache, and subsequent runs should be much faster. In a perfect world, we'd have proper mocks and json representations of the data. PRs are always welcome :)
+\* note the first time you run this, it may take a few minutes. However, the requests will cache, and subsequent runs should be much faster.
 
 #### 6. Submit a pull request
 
