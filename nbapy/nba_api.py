@@ -10,7 +10,7 @@ class NbaAPI:
     """Represents an API call for stats.nba.com."""
 
     TODAY = datetime.datetime.today()
-    BASE_URL = "http://stats.nba.com/stats/"
+    BASE_URL = "https://stats.nba.com/stats/"
     HEADERS = {
         "Host": "stats.nba.com",
         "User-Agent": (
