@@ -5,7 +5,7 @@ with open("README.md", "r") as readme:
 
 setup(
     name="nbapy",
-    version="1.1.4",
+    version="1.1.5",
     description="Python client for NBA statistics located at nba.com",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
