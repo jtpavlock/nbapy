@@ -1,8 +1,8 @@
 """API wrapper for stats.nba.com."""
 
 
-from requests import get
 import pandas as pd
+import requests
 
 
 class NbaAPI:
@@ -76,17 +76,20 @@ class NbaAPI:
         return pd.DataFrame(values, columns=headers)
 
     def _get_json(self):
-        """Internal method to streamline our requests / json getting.
+        """Sends the request to stats.nba.com .
 
         Raises:
-            HTTPError: if requests hits a status code != 200
+            requests.exceptions.HTTPError: if requests hits a status code != 200
 
         Returns:
             json (json): json object for selected API call
         """
-        _get = get(
-            self.BASE_URL + self.endpoint, params=self.params, headers=self.HEADERS
+        response = requests.get(
+            self.BASE_URL + self.endpoint,
+            params=self.params,
+            headers=self.HEADERS,
+            timeout=5,
         )
-        _get.raise_for_status()
+        response.raise_for_status()
 
-        return _get.json()
+        return response.json()
