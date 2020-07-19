@@ -102,7 +102,15 @@ class NbaAPI:
         )
         response.raise_for_status()
 
-        if not response.from_cache:
+        cached_req = False
+        try:
+            if response.from_cache:
+                cached_req = True
+        except AttributeError:
+            # requests_cache not being used
+            pass
+
+        if not cached_req:
             self.last_call = time.time()
 
         return response.json()
