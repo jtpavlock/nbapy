@@ -11,8 +11,33 @@ A python facing API for `stats.nba.com`
 
 ***Warning*** `stats.nba.com` is notorious for being extremely unreliable. Please report any issues you find.
 
-## Documentation / Usage
-An ongoing process, but check out the [wiki](https://github.com/jtpavlock/nbapy/wiki), the [jupyter notebook docs](https://github.com/jtpavlock/nbapy/tree/master/docs/), or feel free to poke around the codebase.
+## Usage
+
+All data is returned as a pandas dataframe (check out the [starter docs](https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html) if you're new to pandas). For example:
+
+```
+from nbapy import game
+import pandas as pd
+
+game_id = '0021900017'  # taken from 'https://stats.nba.com/game/0021900017/'
+stats = pd.DataFrame(game.BoxScore(game_id).players_stats())
+```
+
+If you want to cache results so you don't have to reach the api every time, you can use [requests-cache](https://pypi.org/project/requests-cache/)
+```
+from nbapy import game
+import pandas as pd
+import requests_cache
+
+requests_cache.install_cache('nbapy_cache')
+
+game_id = '0021900017'
+stats = pd.DataFrame(game.BoxScore(game_id).players_stats())
+```
+
+## Documentation
+An ongoing process, but check out [the jupyter notebook docs](https://github.com/jtpavlock/nbapy/tree/master/docs), or feel free to poke around the codebase.
+
 
 ## Installation
 To install from pypi:
