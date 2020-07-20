@@ -7,7 +7,7 @@ from nbapy import game
 game_id = "0021900017"
 
 
-class Info:
+class TestInfo:
     @staticmethod
     def test_game_summary():
         game_summary = game.Info(game_id).game_summary()

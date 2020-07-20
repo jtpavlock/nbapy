@@ -7,7 +7,7 @@ import requests
 
 
 class NbaAPI:
-    """Represents an API call for stats.nba.com."""
+    """Represents an API call for stats.nba.com ."""
 
     BASE_URL = "https://stats.nba.com/stats/"
     HEADERS = {
