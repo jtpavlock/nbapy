@@ -11,7 +11,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/jtpavlock/nbapy",
     packages=["nbapy"],
-    install_requires=["requests", "pandas"],
+    install_requires=["pandas", "requests", "requests_cache"],
     extras_require={
         "dev": [
             "flake8",
