@@ -25,7 +25,7 @@ class NbaAPI:
         "x-nba-stats-token": "true",
     }
 
-    def __init__(self, endpoint: str, params):
+    def __init__(self, endpoint: str = "", params: dict = None):
         """Make an api call to a specific endpoint with parameters.
 
         Args:
