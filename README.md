@@ -94,3 +94,7 @@ Other ways to contribute involve submitting any issues or adding some documentat
 
 ## To-Do
 - Finish Jupyter Notebook documentation
+
+## Authors
+
+This is orginally based off of https://github.com/seemethere/nba_py so a lot of the work was done by those guys. My goal with this project is to clean up the code, add some proper documentation, and keep it up to date.
