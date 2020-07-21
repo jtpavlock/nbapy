@@ -15,7 +15,7 @@ A python facing API for `stats.nba.com`
 
 All data is returned as a pandas dataframe (check out the [starter docs](https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html) if you're new to pandas). For example:
 
-```
+```python
 from nbapy import game
 import pandas as pd
 
@@ -24,7 +24,7 @@ stats = pd.DataFrame(game.BoxScore(game_id).players_stats())
 ```
 
 If you want to cache results so you don't have to reach the api every time, you can use [requests-cache](https://pypi.org/project/requests-cache/)
-```
+```python
 from nbapy import game
 import pandas as pd
 import requests_cache
@@ -42,23 +42,25 @@ An ongoing process, but check out [the jupyter notebook docs](https://github.com
 ## Installation
 To install from pypi:
 
-```
-$ pip install nbapy
+```bash
+$ python -m pip install nbapy
 ```
 
 Else:
 - Download from source (git clone, zipped package)
 - Run from the root directory:
 
-```
-$ pip install .
+```bash
+$ python -m pip install .
 ```
 
 ## Contributing
 #### 1. Fork the repository and create a feature/bug fix branch
 
 #### 2. Install development requirements
-`$ pip install -e . ".[dev]"`
+```bash
+$ python -m pip install -e . ".[dev]"
+```
 
 #### 3. Hack away
 
