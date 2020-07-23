@@ -52,9 +52,6 @@ class NbaAPI:
         self.params = params
         self.json = self._get_json(rate_limit=1)
 
-        if HAS_REQUESTS_CACHE:
-            print("here")
-
     def get_result(self, result_set_name: str = None) -> pd.DataFrame:
         """Return a specific set of results from our request for those that support it.
 
