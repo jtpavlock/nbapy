@@ -14,6 +14,7 @@ setup(
     install_requires=["pandas", "requests", "requests_cache"],
     extras_require={
         "dev": [
+            "commitizen",
             "flake8",
             "flake8-bugbear",
             "flake8-docstrings",

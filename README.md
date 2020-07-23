@@ -70,6 +70,7 @@ $ python -m pip install -e . ".[dev]"
 * [google docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings)
 * [flake8](https://flake8.pycqa.org/en/latest/index.html#quickstart) for linting
 * [mypy](http://mypy-lang.org/) for static typing analysis
+* [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit style.
 
 *Optional (but recommended)*
 
@@ -78,6 +79,8 @@ $ python -m pip install -e . ".[dev]"
 To install: `$ pre-commit install`
 
 You can also use `$ pre-commit run -a` to run the checks manually.
+
+For commit messages, I recommend using [commtizen](https://github.com/commitizen-tools/commitizen). It is automatically installed in the dev dependencies, so to commit, you just run `cz c` and follow the prompts.
 
 #### 4. Create some tests
 
