@@ -45,6 +45,7 @@ jobs:
         cz bump --yes --changelog
 
     - name: Push changes
+      if: env.NEW_RELEASE == 'true'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.PERSONAL_TOKEN }}
