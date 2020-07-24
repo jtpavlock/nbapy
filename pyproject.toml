@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nbapy"
-version = "1.1.8"
+version = "1.1.9"
 description = "Python client for NBA statistics from nba.com"
 license = "BSD-3-Clause"
 authors = ["Jacob Pavlock <jtpavlock@gmail.com>", "Eli Uriegas"]
@@ -28,7 +28,7 @@ requests_cache  = "*"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.1.8"
+version = "1.1.9"
 version_files = [
     "pyproject.toml:^version",
 ]

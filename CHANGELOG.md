@@ -1,3 +1,9 @@
+## v1.1.9 (2020-07-24)
+
+### Refactor
+
+- **api**: don't call api on initialization
+
 ## v1.1.8 (2020-07-24)
 
 ### Fix
