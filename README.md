@@ -48,21 +48,17 @@ To install from pypi:
 $ python -m pip install nbapy
 ```
 
-Else:
-- Download from source (git clone, zipped package)
-- Run from the root directory:
-
-```bash
-$ python -m pip install .
-```
-
 ## Contributing
 #### 1. Fork the repository and create a feature/bug fix branch
 
 #### 2. Install development requirements
+
+You will to first install [poetry](https://pypi.org/project/poetry/) if you don't already have it.
 ```bash
-$ python -m pip install -e . ".[dev]"
+$ python -m pip install poetry
 ```
+
+After that, just run `poetry install` inside of your fork.
 
 #### 3. Hack away
 
