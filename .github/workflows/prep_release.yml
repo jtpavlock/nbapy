@@ -29,7 +29,16 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -U commitizen
 
+    - name: Check if new release
+      run: |
+        if $(cz bump --dry-run | grep -q None); then
+            echo ::set-env name=NEW_RELEASE::false
+        else
+            echo ::set-env name=NEW_RELEASE::true
+        fi
+
     - name: Bump version and create changelog
+      if: env.NEW_RELEASE == 'true'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
