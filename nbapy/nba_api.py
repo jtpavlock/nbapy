@@ -50,7 +50,6 @@ class NbaAPI:
         """
         self.endpoint = endpoint
         self.params = params
-        self.json = self._get_json(rate_limit=1)
 
     def get_result(self, result_set_name: str = None) -> pd.DataFrame:
         """Return a specific set of results from our request for those that support it.
@@ -65,6 +64,8 @@ class NbaAPI:
             Result in a panadas dataframe
 
         """
+        self.json = self._get_json(rate_limit=1)
+
         # result_set can either be under 'resultSets' or 'resultSet'
         if result_set_name:
             result_set = next(
