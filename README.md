@@ -20,7 +20,8 @@ from nbapy import game
 import pandas as pd
 
 game_id = '0021900017'  # taken from 'https://stats.nba.com/game/0021900017/'
-stats = pd.DataFrame(game.BoxScore(game_id).players_stats())
+stats = game.BoxScore(game_id).players_stats()
+print(stats)
 ```
 
 If you want to cache results so you don't have to reach the api every time, you can use [requests-cache](https://pypi.org/project/requests-cache/)
@@ -32,7 +33,8 @@ import requests_cache
 requests_cache.install_cache('nbapy_cache')
 
 game_id = '0021900017'
-stats = pd.DataFrame(game.BoxScore(game_id).players_stats())
+stats = game.BoxScore(game_id).players_stats()
+print(stats)
 ```
 
 ## Documentation
