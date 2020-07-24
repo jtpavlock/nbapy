@@ -36,7 +36,7 @@ stats = pd.DataFrame(game.BoxScore(game_id).players_stats())
 ```
 
 ## Documentation
-An ongoing process, but check out [the jupyter notebook docs](https://github.com/jtpavlock/nbapy/tree/master/docs), or feel free to poke around the codebase.
+Not currently exhaustive (PRs are welcome!), but check out [the jupyter notebook docs](https://github.com/jtpavlock/nbapy/tree/master/docs), or feel free to poke around the codebase.
 
 
 ## Installation
