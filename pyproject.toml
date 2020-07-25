@@ -20,6 +20,7 @@ commitizen = "*"
 flake8 = "*"
 flake8-bugbear = "*"
 flake8-docstrings = "*"
+isort = "^5.0.0"
 mypy = "*"
 pre-commit = "*"
 pytest = "*"
@@ -33,3 +34,6 @@ version_files = [
     "pyproject.toml:^version",
 ]
 tag_format = "v$version"
+
+[tool.isort]
+profile = 'black'

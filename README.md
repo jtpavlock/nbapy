@@ -69,6 +69,9 @@ After that, just run `poetry install` inside of your fork.
 * [flake8](https://flake8.pycqa.org/en/latest/index.html#quickstart) for linting
 * [mypy](http://mypy-lang.org/) for static typing analysis
 * [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit style.
+* [isort](https://github.com/timothycrosley/isort/) for import organization.
+
+Whew, that's a lot, but I'm a big fan of clean code. The good news is that if you follow the following advice, you'll find these aren't too hard to manage :smile:
 
 *Optional (but recommended)*
 
@@ -78,7 +81,7 @@ To install: `$ pre-commit install`
 
 You can also use `$ pre-commit run -a` to run the checks manually.
 
-For commit messages, I recommend using [commtizen](https://github.com/commitizen-tools/commitizen). It is automatically installed in the dev dependencies, so to commit, you just run `cz c` and follow the prompts.
+For commit messages, I recommend using [commitizen](https://github.com/commitizen-tools/commitizen). It is automatically installed in the dev dependencies, so to commit, you just run `cz c` and follow the prompts.
 
 #### 4. Create some tests
 
