@@ -2,8 +2,8 @@
 
 from datetime import datetime
 
-from nbapy.nba_api import NbaAPI
 from nbapy import constants
+from nbapy.nba_api import NbaAPI
 
 
 class Scoreboard:
