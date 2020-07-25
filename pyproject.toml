@@ -26,6 +26,7 @@ pre-commit = "*"
 pytest = "*"
 pytest-cov = "*"
 requests_cache  = "*"
+sphinx_rtd_theme = "*"
 
 [tool.commitizen]
 name = "cz_conventional_commits"

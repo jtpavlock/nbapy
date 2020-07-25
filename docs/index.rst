@@ -1,8 +1,3 @@
-.. nbapy documentation master file, created by
-   sphinx-quickstart on Sat Jul 25 14:58:30 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to nbapy's documentation!
 =================================
 
@@ -10,6 +5,7 @@ Welcome to nbapy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   modules
 
 
 Indices and tables
