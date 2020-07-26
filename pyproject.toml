@@ -25,7 +25,8 @@ mypy = "*"
 pre-commit = "*"
 pytest = "*"
 pytest-cov = "*"
-requests_cache  = "*"
+requests_cache = "*"
+sphinx = "*"
 sphinx_rtd_theme = "*"
 
 [tool.commitizen]
