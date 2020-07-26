@@ -14,9 +14,16 @@ python = "^3.6"
 pandas = "*"
 requests = "*"
 requests_cache = "*"
+
+# necessary for extras
 sphinx = {version = "^3", optional = true}
 
 [tool.poetry.dev-dependencies]
+# tests
+pytest = "*"
+pytest-cov = "*"
+
+# lint
 commitizen = "*"
 flake8 = "*"
 flake8-bugbear = "*"
@@ -24,9 +31,8 @@ flake8-docstrings = "*"
 isort = "^5"
 mypy = "*"
 pre-commit = "*"
-pytest = "*"
-pytest-cov = "*"
-requests_cache = "*"
+
+# docs
 sphinx = "^3"
 sphinx_rtd_theme = "*"
 
