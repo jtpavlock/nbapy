@@ -83,6 +83,8 @@ You can also use `$ pre-commit run -a` to run the checks manually.
 
 For commit messages, I recommend using [commitizen](https://github.com/commitizen-tools/commitizen). It is automatically installed in the dev dependencies, so to commit, you just run `cz c` and follow the prompts.
 
+If you're using pre-commit, and either the black or isort check fails, the good news is it will fix the problems for you. However, it won't continue the commit automatically so that you get a chance to look over the changes. You'll have to re-stage the changes, and then you can run `cz c --retry` so you don't lose that nice commit message you just wrote.
+
 #### 4. Create some tests
 
 #### 5. Make sure everything looks good
