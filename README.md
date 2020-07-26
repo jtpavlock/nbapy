@@ -71,7 +71,7 @@ After that, just run `poetry install` inside of your fork.
 * [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit style.
 * [isort](https://github.com/timothycrosley/isort/) for import organization.
 
-Whew, that's a lot, but I'm a big fan of clean code. The good news is that if you follow the following advice, you'll find these aren't too hard to manage :smile:
+Whew, that's a lot, but I'm a big fan of clean code, and I hope you are too! The good news is that if you follow the following advice, you'll find these aren't too hard to manage :smile:
 
 *Optional (but recommended)*
 
