@@ -4,60 +4,6 @@ from nbapy import constants
 from nbapy.nba_api import NbaAPI
 
 
-class Info:
-    _endpoint = "boxscoresummaryv2"
-
-    def __init__(
-        self,
-        game_id: str,
-        season=constants.CURRENT_SEASON,
-        season_type=constants.SeasonType.Default,
-        range_type=constants.RangeType.Default,
-        start_period=constants.StartPeriod.Default,
-        end_period=constants.EndPeriod.Default,
-        start_range=constants.StartRange.Default,
-        end_range=constants.EndRange.Default,
-    ):
-        self._params = {
-            "GameID": game_id,
-            "Season": season,
-            "SeasonType": season_type,
-            "RangeType": range_type,
-            "StartPeriod": start_period,
-            "EndPeriod": end_period,
-            "StartRange": start_range,
-            "EndRange": end_range,
-        }
-        self.api = NbaAPI(self._endpoint, self._params)
-
-    def game_summary(self):
-        return self.api.get_result("GameSummary")
-
-    def other_stats(self):
-        return self.api.get_result("OtherStats")
-
-    def officials(self):
-        return self.api.get_result("Officials")
-
-    def inactive_players(self):
-        return self.api.get_result("InactivePlayers")
-
-    def game_info(self):
-        return self.api.get_result("GameInfo")
-
-    def line_score(self):
-        return self.api.get_result("LineScore")
-
-    def last_meeting(self):
-        return self.api.get_result("LastMeeting")
-
-    def season_series(self):
-        return self.api.get_result("SeasonSeries")
-
-    def available_video(self):
-        return self.api.get_result("AvailableVideo")
-
-
 class _BoxScore(ABC):
     @property
     @classmethod
@@ -163,6 +109,74 @@ class BoxScorePlayerTracking:
         return self.api.get_result()
 
 
+class BoxScoreHustle:
+    _endpoint = "hustlestatsboxscore"
+
+    def __init__(self, game_id):
+        self._params = {"GameID": game_id}
+        self.api = NbaAPI(self._endpoint, self._params)
+
+    def players_stats(self):
+        return self.api.get_result("PlayerStats")
+
+    def team_stats(self):
+        return self.api.get_result("TeamStats")
+
+
+class Info:
+    _endpoint = "boxscoresummaryv2"
+
+    def __init__(
+        self,
+        game_id: str,
+        season=constants.CURRENT_SEASON,
+        season_type=constants.SeasonType.Default,
+        range_type=constants.RangeType.Default,
+        start_period=constants.StartPeriod.Default,
+        end_period=constants.EndPeriod.Default,
+        start_range=constants.StartRange.Default,
+        end_range=constants.EndRange.Default,
+    ):
+        self._params = {
+            "GameID": game_id,
+            "Season": season,
+            "SeasonType": season_type,
+            "RangeType": range_type,
+            "StartPeriod": start_period,
+            "EndPeriod": end_period,
+            "StartRange": start_range,
+            "EndRange": end_range,
+        }
+        self.api = NbaAPI(self._endpoint, self._params)
+
+    def game_summary(self):
+        return self.api.get_result("GameSummary")
+
+    def other_stats(self):
+        return self.api.get_result("OtherStats")
+
+    def officials(self):
+        return self.api.get_result("Officials")
+
+    def inactive_players(self):
+        return self.api.get_result("InactivePlayers")
+
+    def game_info(self):
+        return self.api.get_result("GameInfo")
+
+    def line_score(self):
+        return self.api.get_result("LineScore")
+
+    def last_meeting(self):
+        return self.api.get_result("LastMeeting")
+
+    def season_series(self):
+        return self.api.get_result("SeasonSeries")
+
+    def available_video(self):
+        return self.api.get_result("AvailableVideo")
+
+
 class PlayByPlay:
     _endpoint = "playbyplay"
 
@@ -184,17 +198,3 @@ class PlayByPlay:
 
     def available_video(self):
         return self.api.get_result("AvailableVideo")
-
-
-class BoxScoreHustle:
-    _endpoint = "hustlestatsboxscore"
-
-    def __init__(self, game_id):
-        self._params = {"GameID": game_id}
-        self.api = NbaAPI(self._endpoint, self._params)
-
-    def players_stats(self):
-        return self.api.get_result("PlayerStats")
-
-    def team_stats(self):
-        return self.api.get_result("TeamStats")
