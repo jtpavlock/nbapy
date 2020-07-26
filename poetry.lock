@@ -114,7 +114,7 @@ description = "Minimal, easy-to-use, declarative cli tool"
 name = "decli"
 optional = false
 python-versions = ">=3.6"
-version = "0.5.1"
+version = "0.5.2"
 
 [[package]]
 category = "dev"
@@ -805,8 +805,11 @@ version = "3.1.0"
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
+[extras]
+docs = []
+
 [metadata]
-content-hash = "9d86b76e8396aad26397fa1104936410592682d7a43da6f2d20e285792ddcb88"
+content-hash = "40cd7511bf5e722cc091d8d69dbbf2afb962d8772bc140b7cd099a6371dea389"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -887,8 +890,8 @@ coverage = [
     {file = "coverage-5.2.1.tar.gz", hash = "sha256:a34cb28e0747ea15e82d13e14de606747e9e484fb28d63c999483f5d5188e89b"},
 ]
 decli = [
-    {file = "decli-0.5.1-py3-none-any.whl", hash = "sha256:36dbda6cc9fdd7880b7ee141bccab048672307f4f419072aa1a394b01cb10a32"},
-    {file = "decli-0.5.1.tar.gz", hash = "sha256:1454aeee315130e979754137c46f3a9294674b17c3055c350bc4cd0c2d7f0f0e"},
+    {file = "decli-0.5.2-py3-none-any.whl", hash = "sha256:d3207bc02d0169bf6ed74ccca09ce62edca0eb25b0ebf8bf4ae3fb8333e15ca0"},
+    {file = "decli-0.5.2.tar.gz", hash = "sha256:f2cde55034a75c819c630c7655a844c612f2598c42c21299160465df6ad463ad"},
 ]
 distlib = [
     {file = "distlib-0.3.1-py2.py3-none-any.whl", hash = "sha256:8c09de2c67b3e7deef7184574fc060ab8a793e7adbb183d942c389c8b13c52fb"},

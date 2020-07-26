@@ -14,20 +14,26 @@ python = "^3.6"
 pandas = "*"
 requests = "*"
 requests_cache = "*"
+sphinx = {version = "^3", optional = true}
 
 [tool.poetry.dev-dependencies]
 commitizen = "*"
 flake8 = "*"
 flake8-bugbear = "*"
 flake8-docstrings = "*"
-isort = "^5.0.0"
+isort = "^5"
 mypy = "*"
 pre-commit = "*"
 pytest = "*"
 pytest-cov = "*"
 requests_cache = "*"
-sphinx = "*"
+sphinx = "^3"
 sphinx_rtd_theme = "*"
+
+# needed because readthedocs doesn't natively support poetry
+# https://github.com/readthedocs/readthedocs.org/issues/4912
+[tool.poetry.extras]
+docs = ["sphinx"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
