@@ -5,4 +5,3 @@ nbapy
    :maxdepth: 4
 
    nbapy
-   tests
