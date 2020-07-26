@@ -1,18 +1,8 @@
 nbapy package
 =============
 
-Submodules
-----------
 
-nbapy.constants module
-----------------------
-
-.. automodule:: nbapy.constants
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nbapy.draft\_combine module
+Draft combine
 ---------------------------
 
 .. automodule:: nbapy.draft_combine
@@ -20,7 +10,7 @@ nbapy.draft\_combine module
    :undoc-members:
    :show-inheritance:
 
-nbapy.game module
+Game
 -----------------
 
 .. automodule:: nbapy.game
@@ -28,7 +18,7 @@ nbapy.game module
    :undoc-members:
    :show-inheritance:
 
-nbapy.league module
+League
 -------------------
 
 .. automodule:: nbapy.league
@@ -36,15 +26,8 @@ nbapy.league module
    :undoc-members:
    :show-inheritance:
 
-nbapy.nba\_api module
----------------------
 
-.. automodule:: nbapy.nba_api
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nbapy.player module
+Player
 -------------------
 
 .. automodule:: nbapy.player
@@ -52,7 +35,7 @@ nbapy.player module
    :undoc-members:
    :show-inheritance:
 
-nbapy.scoreboard module
+Scoreboard
 -----------------------
 
 .. automodule:: nbapy.scoreboard
@@ -60,7 +43,7 @@ nbapy.scoreboard module
    :undoc-members:
    :show-inheritance:
 
-nbapy.shot\_chart module
+Shot chart
 ------------------------
 
 .. automodule:: nbapy.shot_chart
@@ -68,7 +51,7 @@ nbapy.shot\_chart module
    :undoc-members:
    :show-inheritance:
 
-nbapy.team module
+Team
 -----------------
 
 .. automodule:: nbapy.team
@@ -76,11 +59,10 @@ nbapy.team module
    :undoc-members:
    :show-inheritance:
 
+Constants
+----------------------
 
-Module contents
----------------
-
-.. automodule:: nbapy
+.. automodule:: nbapy.constants
    :members:
    :undoc-members:
    :show-inheritance:

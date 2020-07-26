@@ -1,4 +1,4 @@
-nbapy
+API
 =====
 
 .. toctree::
