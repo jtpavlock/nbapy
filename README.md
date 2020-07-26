@@ -87,6 +87,7 @@ For commit messages, I recommend using [commitizen](https://github.com/commitize
 
 #### 5. Make sure everything looks good
 `$ pytest --cov`* 
+`$ sphinx-build -W -q -b html docs docs/_build/html`
 
 `$ pre-commit run -a` (if you didn't install the pre-commit git hook)
 
