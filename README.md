@@ -38,7 +38,7 @@ print(stats)
 ```
 
 ## Documentation
-Not currently exhaustive (PRs are welcome!), but check out [the jupyter notebook examples](https://github.com/jtpavlock/nbapy/tree/master/docs/examples), or feel free to poke around the codebase.
+A constant work-in-progress, but [check them out](https://nbapy.readthedocs.io/en/latest/)!
 
 
 ## Installation
