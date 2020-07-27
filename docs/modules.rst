@@ -5,16 +5,75 @@ Draft combine
    :members:
    :private-members: _endpoint
    :undoc-members:
-   :show-inheritance:
 
 Game
 ----
 
+..
+    These classes need to be explicitly listed due to
+    https://github.com/sphinx-doc/sphinx/issues/8009
+
 .. automodule:: nbapy.game
-   :members:
-   :private-members: _endpoint
-   :undoc-members:
-   :show-inheritance:
+
+   .. autoclass:: BoxScore
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: BoxScoreScoring
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: BoxScoreUsage
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: BoxScoreMisc
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: BoxScoreAdvanced
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: BoxScoreFourFactors
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: BoxScorePlayerTracking
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: BoxScoreHustle
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: Info
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
+
+   .. autoclass:: PlayByPlay
+      :members:
+      :undoc-members:
+
+      .. autoattribute:: _endpoint
 
 League
 ------
@@ -23,7 +82,6 @@ League
    :members:
    :private-members: _endpoint
    :undoc-members:
-   :show-inheritance:
 
 
 Player
@@ -33,7 +91,6 @@ Player
    :members:
    :private-members: _endpoint
    :undoc-members:
-   :show-inheritance:
 
 Scoreboard
 ----------
@@ -42,7 +99,6 @@ Scoreboard
    :members:
    :private-members: _endpoint
    :undoc-members:
-   :show-inheritance:
 
 Shot Chart
 ----------
@@ -51,7 +107,6 @@ Shot Chart
    :members:
    :private-members: _endpoint
    :undoc-members:
-   :show-inheritance:
 
 Team
 ----
@@ -60,7 +115,6 @@ Team
    :members:
    :private-members: _endpoint
    :undoc-members:
-   :show-inheritance:
 
 Constants
 ---------
@@ -69,4 +123,3 @@ Constants
    :members:
    :private-members: _endpoint
    :undoc-members:
-   :show-inheritance:
