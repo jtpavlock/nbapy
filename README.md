@@ -90,7 +90,7 @@ If you're using pre-commit, and either the black or isort check fails, the good 
 #### 5. Make sure everything looks good
 `$ pytest --cov`* 
 
-`$ sphinx-build -W -q -b html docs docs/_build/html`
+`$ sphinx-build -n -W -q -b html docs docs/_build/html`
 
 `$ pre-commit run -a` (if you didn't install the pre-commit git hook)
 
