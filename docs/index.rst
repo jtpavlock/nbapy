@@ -5,7 +5,7 @@ Welcome to nbapy's documentation!
    :maxdepth: 1
    :caption: Contents:
 
-   modules
+   api
 
 
 Indices and tables
