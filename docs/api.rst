@@ -1,10 +1,10 @@
 API
 ===
 
-| To see some example outputs for each function, check out `our jupyter notebook`_.
-| To get more information on function parameters and their defaults, see the `Constants module`_
+| To see some example outputs for each function, check out `our jupyter notebooks`_.
+| To get more information on function parameters and their defaults, see the `Constants module`_.
 
-.. _our jupyter notebook: https://github.com/jtpavlock/nbapy/tree/master/docs/examples
+.. _our jupyter notebooks: https://github.com/jtpavlock/nbapy/tree/master/docs/examples
 .. _Constants module: https://nbapy.readthedocs.io/en/latest/api/constants.html
 
 
