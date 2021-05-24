@@ -13,7 +13,7 @@ A python facing API for `stats.nba.com`
 
 ## Usage
 
-All data is returned as a pandas dataframe (check out the [starter docs](https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html) if you're new to pandas). For example:
+All data is returned as a pandas dataframe (check out the [starter docs](https://pandas.pydata.org/pandas-docs/stable/user_guide/10min.html) if you're new to pandas). For example:
 
 ```python
 from nbapy import game
